@@ -16,6 +16,7 @@ export const auth = betterAuth({
     enabled: true,
     minPasswordLength: 8,
   },
+  appName: "Nearly",
 
   user: {
     additionalFields: {
@@ -35,14 +36,12 @@ export const auth = betterAuth({
 
   session: {
     expiresIn: 60 * 60 * 24 * 7, // 7 days
-    updateAge: 60 * 60 * 24,     // refresh if older than 1 day
+    updateAge: 60 * 60 * 24, // refresh if older than 1 day
     cookieCache: {
       enabled: true,
       maxAge: 60 * 5,
     },
   },
 
-  trustedOrigins: [
-    process.env.FRONTEND_URL || "http://localhost:5173",
-  ],
+  trustedOrigins: [process.env.FRONTEND_URL || "http://localhost:5173"],
 });
