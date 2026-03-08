@@ -1,7 +1,6 @@
 import { useSearchParams, Link } from "react-router";
 import useSWR from "swr";
-import { CalendarDays, MapPin, ChevronRight, Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { CalendarDays, MapPin, ChevronRight } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -10,8 +9,6 @@ import { r, ROUTES } from "@/config/routes";
 import type { Booking, BookingStatus, ListResponse } from "@/types";
 import { api } from "@/lib/api";
 import { getAvatarPlaceholder } from "@/lib/utils";
-
-// ─── Status config ────────────────────────────────────────────────────────────
 
 const STATUS_CONFIG: Record<
   BookingStatus,
@@ -44,33 +41,29 @@ const STATUS_CONFIG: Record<
 };
 
 const TABS = [
-  { value: "all", label: "All" },
+  { value: "pending", label: "Pending" },
   { value: "active", label: "Active" },
   { value: "completed", label: "Completed" },
-  { value: "cancelled", label: "Cancelled" },
+  { value: "all", label: "All" },
 ] as const;
-
-// ─── Fetcher ──────────────────────────────────────────────────────────────────
 
 async function fetchBookings(url: string): Promise<ListResponse<Booking>> {
   const res = await api.get<ListResponse<Booking>>(url);
   return res.data;
 }
 
-function buildQuery(tab: string): string {
+function buildQuery(tab: string) {
+  if (tab === "pending") return "/provider/bookings?status=requested";
   if (tab === "active")
-    return "/bookings?status=requested,confirmed,in_progress";
-  if (tab === "completed") return "/bookings?status=completed";
-  if (tab === "cancelled") return "/bookings?status=cancelled";
-  return "/bookings";
+    return "/provider/bookings?status=confirmed,in_progress";
+  if (tab === "completed") return "/provider/bookings?status=completed";
+  return "/provider/bookings";
 }
-
-// ─── Booking card ─────────────────────────────────────────────────────────────
 
 function BookingCard({ booking }: { booking: Booking }) {
   const status = STATUS_CONFIG[booking.status];
   const initials =
-    booking.providerName
+    booking.customerName
       ?.split(" ")
       .map((n) => n[0])
       .join("")
@@ -79,17 +72,14 @@ function BookingCard({ booking }: { booking: Booking }) {
 
   return (
     <Link
-      to={r(ROUTES.CUSTOMER_BOOKING_DETAIL, { id: booking.id })}
+      to={r(ROUTES.PROVIDER_BOOKING_DETAIL, { id: booking.id })}
       className="group block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-xl"
     >
       <Card className="py-0 transition-shadow hover:shadow-md hover:ring-foreground/20">
         <CardContent className="flex items-center gap-3 px-4 py-3.5">
-          {/* Category icon */}
           <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-(--brand-orange)/10 text-xl">
             {booking.categoryIcon ?? "🔧"}
           </div>
-
-          {/* Main info */}
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-0.5 flex-wrap">
               <p className="text-sm font-semibold text-foreground truncate">
@@ -101,15 +91,14 @@ function BookingCard({ booking }: { booking: Booking }) {
                 {status.label}
               </span>
             </div>
-
             <div className="flex items-center gap-3 flex-wrap">
-              {booking.providerName && (
+              {booking.customerName && (
                 <div className="flex items-center gap-1.5">
                   <Avatar className="size-4">
                     <AvatarImage
                       src={
-                        booking.providerImage ??
-                        getAvatarPlaceholder(booking.providerName ?? "")
+                        booking.customerImage ??
+                        getAvatarPlaceholder(booking.customerName ?? "")
                       }
                     />
                     <AvatarFallback className="text-[8px] bg-muted">
@@ -117,7 +106,7 @@ function BookingCard({ booking }: { booking: Booking }) {
                     </AvatarFallback>
                   </Avatar>
                   <span className="text-xs text-muted-foreground truncate max-w-28">
-                    {booking.providerName}
+                    {booking.customerName}
                   </span>
                 </div>
               )}
@@ -137,8 +126,6 @@ function BookingCard({ booking }: { booking: Booking }) {
               </div>
             </div>
           </div>
-
-          {/* Price + chevron */}
           <div className="flex items-center gap-2 shrink-0">
             {(booking.finalPrice ?? booking.quotedPrice) && (
               <p className="text-sm font-semibold text-foreground">
@@ -156,27 +143,20 @@ function BookingCard({ booking }: { booking: Booking }) {
   );
 }
 
-function BookingListSkeleton() {
-  return (
-    <div className="space-y-2.5">
-      {Array.from({ length: 4 }).map((_, i) => (
-        <Skeleton key={i} className="h-18 rounded-xl" />
-      ))}
-    </div>
-  );
-}
-
-// ─── Tab content ──────────────────────────────────────────────────────────────
-
 function BookingList({ tab }: { tab: string }) {
-  const query = buildQuery(tab);
-  const { data, isLoading } = useSWR(query, fetchBookings, {
-    refreshInterval: tab === "active" ? 8_000 : 0,
+  const { data, isLoading } = useSWR(buildQuery(tab), fetchBookings, {
+    refreshInterval: tab === "active" || tab === "pending" ? 8_000 : 0,
   });
-
   const bookings = data?.data ?? [];
 
-  if (isLoading) return <BookingListSkeleton />;
+  if (isLoading)
+    return (
+      <div className="space-y-2.5">
+        {Array.from({ length: 3 }).map((_, i) => (
+          <Skeleton key={i} className="h-18 rounded-xl" />
+        ))}
+      </div>
+    );
 
   if (bookings.length === 0) {
     return (
@@ -189,19 +169,8 @@ function BookingList({ tab }: { tab: string }) {
           No bookings here
         </p>
         <p className="text-xs text-muted-foreground mt-1">
-          {tab === "all"
-            ? "Book a service to get started."
-            : "Nothing in this category yet."}
+          New requests will appear here.
         </p>
-        {tab === "all" && (
-          <Button
-            asChild
-            size="sm"
-            className="mt-4 bg-brand-orange hover:bg-(--brand-orange)/90 text-white"
-          >
-            <Link to={ROUTES.BROWSE}>Browse professionals</Link>
-          </Button>
-        )}
       </div>
     );
   }
@@ -215,67 +184,26 @@ function BookingList({ tab }: { tab: string }) {
   );
 }
 
-// ─── Main Page ────────────────────────────────────────────────────────────────
-
-export default function CustomerBookingsPage() {
+export default function ProviderBookingsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const activeTab = searchParams.get("tab") ?? "all";
-
-  const justBooked = searchParams.get("booked") === "1";
+  const activeTab = searchParams.get("tab") ?? "pending";
 
   return (
     <div className="space-y-5">
-      {/* Header */}
-      <div className="flex items-center justify-between gap-4">
-        <div>
-          <h1
-            className="text-2xl font-semibold text-foreground"
-            style={{ fontFamily: "Fraunces, serif" }}
-          >
-            My Bookings
-          </h1>
-          <p className="text-sm text-muted-foreground mt-0.5">
-            Track and manage all your service bookings
-          </p>
-        </div>
-        <Button
-          asChild
-          size="sm"
-          className="bg-brand-orange hover:bg-(--brand-orange)/90 text-white gap-1.5 shrink-0"
+      <div>
+        <h1
+          className="text-2xl font-semibold text-foreground"
+          style={{ fontFamily: "Fraunces, serif" }}
         >
-          <Link to={ROUTES.BROWSE}>
-            <Plus className="size-3.5" />
-            New Booking
-          </Link>
-        </Button>
+          Job Requests
+        </h1>
+        <p className="text-sm text-muted-foreground mt-0.5">
+          Manage your incoming and ongoing bookings
+        </p>
       </div>
-
-      {/* Success toast-ish banner */}
-      {justBooked && (
-        <div className="flex items-center gap-3 rounded-xl bg-emerald-50 border border-emerald-200 px-4 py-3">
-          <span className="text-xl">🎉</span>
-          <div>
-            <p className="text-sm font-semibold text-emerald-800">
-              Booking requested!
-            </p>
-            <p className="text-xs text-emerald-700">
-              The professional will confirm shortly. You'll be notified.
-            </p>
-          </div>
-        </div>
-      )}
-
-      {/* Tabs */}
       <Tabs
         value={activeTab}
-        onValueChange={(v) =>
-          setSearchParams((p) => {
-            const next = new URLSearchParams(p);
-            next.set("tab", v);
-            next.delete("booked");
-            return next;
-          })
-        }
+        onValueChange={(v) => setSearchParams({ tab: v })}
       >
         <TabsList variant="line" className="mb-5 gap-0.5 p-0 h-auto">
           {TABS.map((t) => (
@@ -288,7 +216,6 @@ export default function CustomerBookingsPage() {
             </TabsTrigger>
           ))}
         </TabsList>
-
         {TABS.map((t) => (
           <TabsContent key={t.value} value={t.value}>
             <BookingList tab={t.value} />
