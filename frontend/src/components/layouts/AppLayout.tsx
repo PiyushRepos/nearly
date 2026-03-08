@@ -121,7 +121,7 @@ export default function AppLayout() {
             className="flex items-center gap-1 text-xl font-bold tracking-tight group-data-[collapsible=icon]:justify-center"
             style={{ fontFamily: "Fraunces, serif" }}
           >
-            <span className="group-data-[collapsible=icon]:hidden">nearly</span>
+            <span className="group-data-[collapsible=icon]:hidden">Nearly</span>
             <span className="text-primary text-2xl leading-none">.</span>
           </Link>
         </SidebarHeader>

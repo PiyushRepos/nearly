@@ -31,7 +31,7 @@ export default function AuthLayout() {
         className="relative mb-8 flex items-center gap-1 text-2xl font-bold tracking-tight"
         style={{ fontFamily: "Fraunces, serif" }}
       >
-        nearly
+        Nearly
         <span className="text-primary">.</span>
       </Link>
 

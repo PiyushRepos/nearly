@@ -1,6 +1,34 @@
+<div align="center">
+  <img src="./og-image.png" alt="nearly — The help you need is already nearby" width="100%" />
+</div>
+
+<br />
+
+<div align="center">
+  <a href="https://nearly.piyus.me"><strong>🌐 Live App</strong></a> &nbsp;·&nbsp;
+  <a href="https://github.com/piyushRepos/nearly"><strong>GitHub Repo</strong></a>
+</div>
+
+<br />
+
+<div align="center">
+  <img src="https://img.shields.io/badge/React_19-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" />
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS" />
+  <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js" />
+  <img src="https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white" alt="Express" />
+  <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL" />
+  <img src="https://img.shields.io/badge/Razorpay-02042B?style=for-the-badge&logo=razorpay&logoColor=3395FF" alt="Razorpay" />
+  <img src="https://img.shields.io/badge/Cloudinary-3448C5?style=for-the-badge&logo=cloudinary&logoColor=white" alt="Cloudinary" />
+</div>
+
+<br />
+
+---
+
 # nearly.
 
-**Nearly** is a hyperlocal home-services marketplace that connects customers with verified local professionals — think plumbers, electricians, cleaners, and more — in just a few taps.
+**Nearly** is a hyperlocal home-services marketplace that connects customers with verified local professionals — think plumbers, electricians, cleaners, and more, in just a few taps.
 
 ---
 
@@ -63,6 +91,26 @@ Professionals get their own dashboard to manage incoming bookings, update job pr
 
 ---
 
+## Database Schema
+
+![ER Diagram](./er-diagram.png)
+
+The schema is built around 8 tables:
+
+| Table                                  | Purpose                                                                   |
+| -------------------------------------- | ------------------------------------------------------------------------- |
+| `user`                                 | All accounts (customer, provider, admin) with a `role` field              |
+| `session` / `account` / `verification` | Managed by Better Auth                                                    |
+| `provider_profiles`                    | Extended profile for providers — rates, ratings, approval status          |
+| `provider_services`                    | Junction table linking providers to the categories they offer             |
+| `service_categories`                   | Catalogue of service types (plumbing, electrical, etc.)                   |
+| `bookings`                             | Core entity — links customer, provider, category; tracks status & payment |
+| `booking_updates`                      | Chronological work log (messages + photos) attached to a booking          |
+| `reviews`                              | One review per booking, linked to both customer and provider profile      |
+| `notifications`                        | In-app notification feed per user                                         |
+
+---
+
 ## Tech Stack
 
 | Layer         | Technology                                             |
@@ -95,7 +143,7 @@ Professionals get their own dashboard to manage incoming bookings, update job pr
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/nearly.git
+git clone https://github.com/piyushRepos/nearly.git
 cd nearly
 ```
 
@@ -186,7 +234,7 @@ VITE_API_URL=http://localhost:3000
 
 ## Deployment
 
-**Live app:** [https://your-deployment-url.com](https://your-deployment-url.com)
+**Live app:** [https://nearly.piyus.me](https://nearly.piyus.me)
 
 **Recommended deployment targets:**
 
