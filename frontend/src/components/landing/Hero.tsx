@@ -1,3 +1,5 @@
+import { Link } from "react-router";
+import { ArrowRight } from "lucide-react";
 import { motion, type Variants } from "motion/react";
 
 const fadeUp: Variants = {
@@ -85,17 +87,17 @@ export default function Hero() {
         custom={0.3}
         className="relative flex gap-3.5 justify-center flex-wrap"
       >
-        <a
-          href="#"
+        <Link
+          to="/browse"
           className="text-[0.92rem] font-semibold bg-primary text-white px-9 py-3.75 rounded-full hover:bg-foreground transition-all hover:-translate-y-0.5 shadow-[0_4px_20px_rgba(200,96,58,0.25)]"
         >
           Find a Professional
-        </a>
+        </Link>
         <a
           href="#professionals"
-          className="text-[0.92rem] font-medium text-foreground px-7 py-3.75 rounded-full border border-border hover:border-foreground hover:bg-[#f7f3ee] transition-all"
+          className="text-[0.92rem] font-medium text-foreground px-7 py-3.75 rounded-full border border-border hover:border-foreground hover:bg-[#f7f3ee] transition-all flex items-center gap-2"
         >
-          Grow your bookings →
+          Grow your bookings <ArrowRight className="size-4" />
         </a>
       </motion.div>
 

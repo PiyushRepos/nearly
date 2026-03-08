@@ -58,12 +58,12 @@
   --radius: 0.75rem; /* base 12px — cards use xl/2xl */
 
   /* Sidebar */
-  --sidebar: oklch(0.93 0.008 85);
+  --sidebar: oklch(0.966 0.009 85);
   --sidebar-foreground: oklch(0.148 0.006 85);
   --sidebar-primary: oklch(0.565 0.138 46.5);
   --sidebar-primary-foreground: oklch(0.99 0 0);
-  --sidebar-accent: oklch(0.88 0.04 155);
-  --sidebar-accent-foreground: oklch(0.22 0.04 160);
+  --sidebar-accent: oklch(0.92 0.03 46.5);
+  --sidebar-accent-foreground: oklch(0.26 0.07 46.5);
   --sidebar-border: oklch(0.88 0.01 85);
   --sidebar-ring: oklch(0.565 0.138 46.5);
 }
@@ -101,12 +101,12 @@
   --brand-cream: oklch(0.966 0.009 85);
   --brand-green-light: oklch(0.28 0.045 160);
 
-  --sidebar: oklch(0.19 0.01 160);
+  --sidebar: oklch(0.142 0.008 160);
   --sidebar-foreground: oklch(0.95 0.006 85);
   --sidebar-primary: oklch(0.62 0.138 46.5);
   --sidebar-primary-foreground: oklch(0.99 0 0);
-  --sidebar-accent: oklch(0.28 0.045 160);
-  --sidebar-accent-foreground: oklch(0.95 0.01 85);
+  --sidebar-accent: oklch(0.28 0.06 46.5);
+  --sidebar-accent-foreground: oklch(0.96 0.02 46.5);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.62 0.138 46.5);
 }

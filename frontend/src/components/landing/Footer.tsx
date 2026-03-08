@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import { footerColumns } from "@/config/landing";
 
 export default function Footer() {
@@ -8,12 +9,12 @@ export default function Footer() {
         <div className="flex flex-wrap justify-between items-start gap-10 pb-10 border-b border-white/8">
           {/* Brand */}
           <div>
-            <a
-              href="/"
+            <Link
+              to="/"
               className="font-display font-bold text-[1.4rem] text-white block mb-2.5"
             >
               Nearly<span className="text-primary">.</span>
-            </a>
+            </Link>
             <p className="text-[0.82rem] font-light text-white/45 leading-relaxed max-w-50">
               Local services, handled warmly — from the first request to the
               final review.
@@ -30,12 +31,21 @@ export default function Footer() {
                 <ul className="space-y-2.5">
                   {col.links.map((link) => (
                     <li key={link.label}>
-                      <a
-                        href={link.href}
-                        className="text-[0.85rem] font-light text-white/35 hover:text-white/80 transition-colors block"
-                      >
-                        {link.label}
-                      </a>
+                      {link.href.startsWith("/") ? (
+                        <Link
+                          to={link.href}
+                          className="text-[0.85rem] font-light text-white/35 hover:text-white/80 transition-colors block"
+                        >
+                          {link.label}
+                        </Link>
+                      ) : (
+                        <a
+                          href={link.href}
+                          className="text-[0.85rem] font-light text-white/35 hover:text-white/80 transition-colors block"
+                        >
+                          {link.label}
+                        </a>
+                      )}
                     </li>
                   ))}
                 </ul>

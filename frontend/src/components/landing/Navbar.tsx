@@ -1,12 +1,23 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router";
 import { motion, useScroll } from "motion/react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, LayoutDashboard, LogOut } from "lucide-react";
 import { navLinks } from "@/config/landing";
+import { useSession, signOut } from "@/lib/auth-client";
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { scrollY } = useScroll();
+  const { data: session } = useSession();
+  const user = session?.user;
+  const role = (user as { role?: string } | undefined)?.role;
+  const dashboardPath =
+    role === "provider"
+      ? "/provider/dashboard"
+      : role === "admin"
+        ? "/admin"
+        : "/customer/dashboard";
 
   useEffect(() => {
     const unsub = scrollY.on("change", (v) => setScrolled(v > 24));
@@ -25,13 +36,13 @@ export default function Navbar() {
       <div className="mx-auto max-w-7xl px-6 lg:px-14">
         <div className="flex h-18 items-center justify-between">
           {/* Logo */}
-          <a
-            href="/"
+          <Link
+            to="/"
             className="font-display font-bold text-2xl tracking-tight text-foreground"
             style={{ letterSpacing: "-0.02em" }}
           >
             Nearly<span className="text-primary">.</span>
-          </a>
+          </Link>
 
           {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-9">
@@ -47,13 +58,40 @@ export default function Navbar() {
           </nav>
 
           {/* CTA pill */}
-          <div className="hidden md:flex items-center">
-            <a
-              href="#"
-              className="text-[0.82rem] font-semibold bg-primary text-white px-6 py-2.5 rounded-full hover:bg-foreground transition-colors"
-            >
-              Find Help Nearby
-            </a>
+          <div className="hidden md:flex items-center gap-3">
+            {user ? (
+              <>
+                <Link
+                  to={dashboardPath}
+                  className="flex items-center gap-1.5 text-[0.82rem] font-semibold bg-primary text-white px-5 py-2.5 rounded-full hover:bg-foreground transition-colors"
+                >
+                  <LayoutDashboard size={14} />
+                  Dashboard
+                </Link>
+                <button
+                  onClick={() => signOut()}
+                  className="text-[0.82rem] font-medium text-muted-foreground hover:text-foreground transition-colors px-3 py-2 flex items-center gap-1.5"
+                >
+                  <LogOut size={13} />
+                  Sign out
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/auth/login"
+                  className="text-[0.82rem] font-medium text-muted-foreground hover:text-foreground transition-colors px-3 py-2"
+                >
+                  Log in
+                </Link>
+                <Link
+                  to="/browse"
+                  className="text-[0.82rem] font-semibold bg-primary text-white px-6 py-2.5 rounded-full hover:bg-foreground transition-colors"
+                >
+                  Find Help Nearby
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile toggle */}
@@ -86,13 +124,46 @@ export default function Navbar() {
               {link.label}
             </a>
           ))}
-          <div className="pt-2">
-            <a
-              href="#"
-              className="block text-center text-sm font-semibold bg-primary text-white px-6 py-2.5 rounded-full hover:bg-foreground transition-colors w-full"
-            >
-              Find Help Nearby
-            </a>
+          <div className="pt-2 flex flex-col gap-2">
+            {user ? (
+              <>
+                <Link
+                  to={dashboardPath}
+                  onClick={() => setMobileOpen(false)}
+                  className="flex items-center justify-center gap-2 text-sm font-semibold bg-primary text-white px-6 py-2.5 rounded-full hover:bg-foreground transition-colors w-full"
+                >
+                  <LayoutDashboard size={14} />
+                  My Dashboard
+                </Link>
+                <button
+                  onClick={() => {
+                    setMobileOpen(false);
+                    signOut();
+                  }}
+                  className="text-center text-sm font-semibold text-foreground/80 hover:text-foreground border border-border px-6 py-2.5 rounded-full transition-colors w-full flex items-center justify-center gap-2"
+                >
+                  <LogOut size={13} />
+                  Sign out
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/auth/login"
+                  onClick={() => setMobileOpen(false)}
+                  className="block text-center text-sm font-semibold text-foreground/80 hover:text-foreground border border-border px-6 py-2.5 rounded-full transition-colors w-full"
+                >
+                  Log in
+                </Link>
+                <Link
+                  to="/browse"
+                  onClick={() => setMobileOpen(false)}
+                  className="block text-center text-sm font-semibold bg-primary text-white px-6 py-2.5 rounded-full hover:bg-foreground transition-colors w-full"
+                >
+                  Find Help Nearby
+                </Link>
+              </>
+            )}
           </div>
         </motion.div>
       )}
