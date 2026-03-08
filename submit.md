@@ -57,17 +57,15 @@ Built role by role — customer booking flow first, then provider job management
 
 ## Project Learnings
 
-- **React Compiler compatibility** — `babel-plugin-react-compiler` aggressively memoizes components and breaks third-party hooks (react-day-picker's `DayPicker`, react-hook-form's `form.watch()`). The fix is to use the `"use no memo"` directive in affected files and replace `watch()` with `useWatch()` from react-hook-form so the compiler sees stable hook calls.
+- **React Compiler breaks third-party hooks** — `babel-plugin-react-compiler` aggressively memoizes components and silently breaks hooks like `react-day-picker` and `form.watch()`. Learned to opt out with `"use no memo"` and swap `watch()` for `useWatch()` so the compiler sees stable hook calls.
 
-- **pnpm + duplicate React** — pnpm's strict hoisting can create multiple React instances, which breaks the Rules of Hooks. Adding `resolve.dedupe: ["react", "react-dom"]` in Vite config forces a single instance across all packages.
+- **pnpm strict hoisting can duplicate React** — pnpm's non-flat `node_modules` created two separate React instances at runtime, causing "Invalid hook call" errors. Fixed by adding `resolve.dedupe: ["react", "react-dom"]` in Vite config.
 
-- **Drizzle ORM self-joins** — joining the same table twice in one query (e.g. joining `user` for both a customer name and a provider name) requires aliasing. Drizzle handles this cleanly by assigning the table to a variable.
+- **Role-scoped API prefixes > single endpoint with role checks** — separating routes into `/customer/bookings` and `/provider/bookings` made access control explicit, self-documenting, and impossible to accidentally cross — much cleaner than conditionals inside a shared handler.
 
-- **Stateless update messages** — provider job updates stored in the DB say "Please pay to close the booking" even after payment is made. Rather than migrating old rows, the cleanest fix was to rewrite the display string on the frontend based on `paymentStatus`, keeping the DB clean.
+- **Derive display state from data, not DB messages** — when a stored update message like "Please pay to close the booking" becomes stale after payment, migrating rows is overkill. Rewriting the display string on the frontend based on `paymentStatus` is simpler and keeps the DB clean.
 
-- **Role-scoped API design** — using separate prefixes (`/customer/bookings` vs `/provider/bookings`) instead of a single `/bookings` endpoint with role checks makes permissions explicit, prevents accidental cross-role data access, and makes the routes self-documenting.
-
-- **Zod v4 breaking change** — the project uses Zod v4 on the frontend and Zod v3 on the backend (pulled in by Better Auth). They coexist fine as separate packages but cannot share schema definitions directly. Kept validation schemas duplicated intentionally.
+- **End-to-end feature slices beat horizontal layers** — building each feature fully (schema → controller → route → page) before moving on made it easier to validate the flow early and avoid integration surprises later.
 
 ---
 
