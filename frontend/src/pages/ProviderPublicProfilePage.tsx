@@ -148,15 +148,15 @@ export default function ProviderPublicProfilePage() {
   );
 
   const handleBook = () => {
+    const bookingPath = r(ROUTES.CUSTOMER_BOOK_SERVICE, { providerId: id! });
     if (!user) {
-      navigate(
-        ROUTES.LOGIN +
-          `?redirect=${encodeURIComponent(window.location.pathname)}`,
-      );
+      navigate(ROUTES.LOGIN, {
+        state: { from: { pathname: bookingPath } },
+      });
       return;
     }
     if (user.role !== "customer") return;
-    if (id) navigate(r(ROUTES.CUSTOMER_BOOK_SERVICE, { providerId: id }));
+    navigate(bookingPath);
   };
 
   const initials = provider?.name

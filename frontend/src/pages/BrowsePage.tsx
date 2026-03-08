@@ -12,7 +12,6 @@ import {
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -93,38 +92,62 @@ function ProviderCard({ provider }: { provider: ProviderProfile }) {
         .toUpperCase()
         .slice(0, 2)
     : "??";
+  const firstService = provider.services?.[0];
+  const extraCount = (provider.services?.length ?? 0) - 1;
 
   return (
     <Link
       to={r(ROUTES.PROVIDER_PROFILE, { id: provider.id })}
-      className="group block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-xl"
+      className="group block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-2xl"
     >
-      <div className="flex flex-col overflow-hidden rounded-xl bg-card ring-1 ring-foreground/10 transition-shadow duration-200 hover:shadow-md hover:ring-foreground/20 h-full">
-        {/* Cover */}
-        <div className="relative h-28 overflow-hidden bg-linear-to-br from-brand-cream to-brand-green-light">
-          {provider.coverPhotoUrl && (
+      <div className="flex flex-col overflow-hidden rounded-2xl bg-card ring-1 ring-foreground/8 transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 h-full">
+        {/* ── Cover ─────────────────────────────────────────────────────── */}
+        <div className="relative h-32 overflow-hidden shrink-0">
+          {provider.coverPhotoUrl ? (
             <img
               src={provider.coverPhotoUrl}
               alt=""
-              className="h-full w-full object-cover"
+              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
             />
+          ) : (
+            <div className="h-full w-full bg-linear-to-br from-brand-cream via-[#f5ede4] to-brand-green-light flex items-center justify-center">
+              {firstService?.icon && (
+                <span className="text-6xl opacity-15 select-none">
+                  {firstService.icon}
+                </span>
+              )}
+            </div>
           )}
-          <div className="absolute inset-0 bg-linear-to-t from-black/30 to-transparent" />
-          {/* Availability chip */}
+          <div className="absolute inset-0 bg-linear-to-t from-black/50 via-black/10 to-transparent" />
+
+          {/* Availability — top right */}
           <span
             className={cn(
-              "absolute top-2.5 right-2.5 inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-medium",
+              "absolute top-3 right-3 inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-medium backdrop-blur-sm",
               avail.className,
             )}
           >
             <span className="size-1.5 rounded-full bg-current" />
             {avail.label}
           </span>
+
+          {/* Primary service pill — bottom left of cover */}
+          {firstService && (
+            <span className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-background/90 backdrop-blur-sm border border-white/20 px-2.5 py-1 text-[11px] font-semibold text-foreground">
+              {firstService.icon}
+              {firstService.name}
+              {extraCount > 0 && (
+                <span className="text-muted-foreground font-normal">
+                  +{extraCount}
+                </span>
+              )}
+            </span>
+          )}
         </div>
 
-        {/* Avatar bridge */}
-        <div className="-mt-7 px-4">
-          <Avatar className="size-14 ring-2 ring-card shadow-sm">
+        {/* ── Avatar bridge ─────────────────────────────────────────────── */}
+        <div className="-mt-6 px-4">
+          <Avatar className="size-12 ring-[3px] ring-card shadow-md">
             <AvatarImage
               src={provider.image ?? getAvatarPlaceholder(provider.name ?? "")}
               alt={provider.name}
@@ -135,83 +158,60 @@ function ProviderCard({ provider }: { provider: ProviderProfile }) {
           </Avatar>
         </div>
 
-        {/* Content */}
-        <div className="flex flex-col gap-3 px-4 pt-2 pb-4 flex-1">
-          <div className="flex items-start justify-between gap-2">
-            <div>
-              <p
-                className="font-semibold text-foreground leading-snug"
-                style={{ fontFamily: "Fraunces, serif" }}
-              >
-                {provider.name ?? "Service Professional"}
-              </p>
+        {/* ── Content ───────────────────────────────────────────────────── */}
+        <div className="flex flex-col gap-2 px-4 pt-2 pb-0 flex-1">
+          {/* Name + verified + location */}
+          <div>
+            <p
+              className="font-semibold text-foreground leading-snug"
+              style={{ fontFamily: "Fraunces, serif" }}
+            >
+              {provider.name ?? "Service Professional"}
+            </p>
+            <div className="flex items-center gap-2 mt-0.5 flex-wrap">
               {provider.isApproved && (
-                <span className="inline-flex items-center gap-1 text-[11px] text-emerald-600 font-medium mt-0.5">
+                <span className="inline-flex items-center gap-0.5 text-[11px] text-emerald-600 font-medium">
                   <CheckCircle2 className="size-3" />
                   Verified
                 </span>
               )}
+              <span className="inline-flex items-center gap-0.5 text-[11px] text-muted-foreground">
+                <MapPin className="size-3 shrink-0" />
+                {provider.area}, {provider.city}
+              </span>
             </div>
-            {provider.hourlyRate && (
-              <div className="text-right shrink-0">
-                <p className="text-base font-bold text-brand-orange">
-                  ₹{Number(provider.hourlyRate).toLocaleString("en-IN")}
-                </p>
-                <p className="text-[10px] text-muted-foreground">/hour</p>
-              </div>
-            )}
           </div>
 
-          {/* Rating */}
-          <StarRating
-            rating={Number(provider.avgRating)}
-            count={provider.totalReviews}
-          />
-
-          {/* Location */}
-          <div className="flex items-center gap-1 text-xs text-muted-foreground">
-            <MapPin className="size-3.5 shrink-0" />
-            <span className="truncate">
-              {provider.area}, {provider.city}
+          {/* Rating + jobs */}
+          <div className="flex items-center gap-2">
+            <StarRating
+              rating={Number(provider.avgRating)}
+              count={provider.totalReviews}
+            />
+            <span className="ml-auto inline-flex items-center gap-1 text-[11px] text-muted-foreground shrink-0">
+              <Clock className="size-3" />
+              {provider.totalBookings} jobs
             </span>
           </div>
+        </div>
 
-          {/* Services */}
-          {provider.services && provider.services.length > 0 && (
-            <div className="flex flex-wrap gap-1.5">
-              {provider.services.slice(0, 3).map((s) => (
-                <Badge
-                  key={s.id}
-                  variant="outline"
-                  className="text-[10px] px-1.5 py-0"
-                >
-                  {s.icon} {s.name}
-                </Badge>
-              ))}
-              {provider.services.length > 3 && (
-                <Badge variant="outline" className="text-[10px] px-1.5 py-0">
-                  +{provider.services.length - 3}
-                </Badge>
-              )}
+        {/* ── Bottom bar ────────────────────────────────────────────────── */}
+        <div className="mt-3 flex items-center justify-between gap-2 border-t border-border px-4 py-3">
+          {provider.hourlyRate ? (
+            <div>
+              <p className="text-sm font-bold text-foreground">
+                ₹{Number(provider.hourlyRate).toLocaleString("en-IN")}
+              </p>
+              <p className="text-[10px] text-muted-foreground">/hour</p>
             </div>
+          ) : (
+            <p className="text-xs text-muted-foreground italic">
+              Price on request
+            </p>
           )}
-
-          {/* CTA */}
-          <div className="mt-auto pt-1">
-            <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
-                <Clock className="size-3" />
-                {provider.totalBookings} jobs
-              </span>
-              <Button
-                size="sm"
-                className="ml-auto h-7 text-xs px-3 bg-brand-orange hover:bg-(--brand-orange)/90 text-white"
-                asChild
-              >
-                <span>View Profile</span>
-              </Button>
-            </div>
-          </div>
+          <span className="rounded-full bg-brand-orange px-4 py-2 text-xs font-semibold text-white transition-colors group-hover:bg-(--brand-orange)/90 shrink-0">
+            Book Now
+          </span>
         </div>
       </div>
     </Link>
@@ -220,18 +220,20 @@ function ProviderCard({ provider }: { provider: ProviderProfile }) {
 
 function ProviderCardSkeleton() {
   return (
-    <div className="overflow-hidden rounded-xl ring-1 ring-foreground/10 bg-card">
-      <Skeleton className="h-28 w-full rounded-none" />
-      <div className="px-4 pt-2 pb-4 space-y-3">
-        <Skeleton className="h-10 w-10 rounded-full -mt-5" />
-        <Skeleton className="h-4 w-3/5" />
-        <Skeleton className="h-3 w-2/5" />
+    <div className="overflow-hidden rounded-2xl ring-1 ring-foreground/8 bg-card">
+      <Skeleton className="h-32 w-full rounded-none" />
+      <div className="px-4 pb-0">
+        <Skeleton className="h-12 w-12 rounded-full -mt-6 mb-2" />
+        <Skeleton className="h-4 w-3/5 mb-1.5" />
+        <Skeleton className="h-3 w-2/5 mb-3" />
         <Skeleton className="h-3 w-1/2" />
-        <div className="flex gap-1.5">
-          <Skeleton className="h-5 w-16 rounded-full" />
-          <Skeleton className="h-5 w-14 rounded-full" />
+      </div>
+      <div className="mt-3 flex items-center justify-between px-4 py-3 border-t border-border">
+        <div className="space-y-1">
+          <Skeleton className="h-4 w-16" />
+          <Skeleton className="h-3 w-10" />
         </div>
-        <Skeleton className="h-7 w-full rounded-lg" />
+        <Skeleton className="h-8 w-24 rounded-full" />
       </div>
     </div>
   );
