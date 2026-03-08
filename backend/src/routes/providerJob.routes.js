@@ -10,6 +10,7 @@ import {
   updateProfile,
   updateAvailability,
   getProviderBookings,
+  getProviderBooking,
   acceptBooking,
   rejectBooking,
   updateJobStatus,
@@ -46,6 +47,7 @@ router.put("/profile",                          upload.single("coverPhoto"), upd
 router.patch("/profile/availability",           validate(availabilitySchema), updateAvailability);
 
 router.get("/bookings",                         getProviderBookings);
+router.get("/bookings/:id",                      getProviderBooking);
 router.patch("/bookings/:id/accept",            acceptBooking);
 router.patch("/bookings/:id/reject",            rejectBooking);
 router.patch("/bookings/:id/status",            validate(statusSchema), updateJobStatus);

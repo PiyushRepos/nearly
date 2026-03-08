@@ -175,6 +175,60 @@ export async function updateAvailability(req, res, next) {
   }
 }
 
+// ─── GET /api/provider/bookings/:id ─────────────────────────────────────────
+export async function getProviderBooking(req, res, next) {
+  try {
+    const { id } = req.params;
+    const [profile] = await db
+      .select({ id: providerProfiles.id })
+      .from(providerProfiles)
+      .where(eq(providerProfiles.userId, req.user.id))
+      .limit(1);
+
+    if (!profile) return res.status(404).json({ error: "Profile not set up" });
+
+    const [booking] = await db
+      .select({
+        id: bookings.id,
+        status: bookings.status,
+        scheduledAt: bookings.scheduledAt,
+        address: bookings.address,
+        city: bookings.city,
+        area: bookings.area,
+        notes: bookings.notes,
+        attachmentUrl: bookings.attachmentUrl,
+        quotedPrice: bookings.quotedPrice,
+        finalPrice: bookings.finalPrice,
+        paymentStatus: bookings.paymentStatus,
+        createdAt: bookings.createdAt,
+        updatedAt: bookings.updatedAt,
+        categoryId: bookings.categoryId,
+        categoryName: serviceCategories.name,
+        categoryIcon: serviceCategories.icon,
+        customerId: bookings.customerId,
+        customerName: user.name,
+        customerImage: user.image,
+      })
+      .from(bookings)
+      .leftJoin(serviceCategories, eq(bookings.categoryId, serviceCategories.id))
+      .leftJoin(user, eq(bookings.customerId, user.id))
+      .where(and(eq(bookings.id, id), eq(bookings.providerId, profile.id)))
+      .limit(1);
+
+    if (!booking) return res.status(404).json({ error: "Booking not found" });
+
+    const updates = await db
+      .select()
+      .from(bookingUpdates)
+      .where(eq(bookingUpdates.bookingId, id))
+      .orderBy(sql`${bookingUpdates.createdAt} asc`);
+
+    res.json({ data: { ...booking, updates } });
+  } catch (err) {
+    next(err);
+  }
+}
+
 // ─── GET /api/provider/bookings ───────────────────────────────────────────────
 export async function getProviderBookings(req, res, next) {
   try {
