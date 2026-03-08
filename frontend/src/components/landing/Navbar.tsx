@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, useScroll } from "motion/react";
 import { Menu, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { navLinks } from "@/config/landing";
 
 export default function Navbar() {
@@ -19,42 +18,42 @@ export default function Navbar() {
       className={[
         "fixed top-0 inset-x-0 z-50 transition-all duration-300",
         scrolled
-          ? "bg-brand-cream/95 backdrop-blur-md shadow-sm border-b border-border"
-          : "bg-transparent",
+          ? "bg-[#fdfaf6]/92 backdrop-blur-md shadow-sm border-b border-border"
+          : "bg-[#fdfaf6]/92 backdrop-blur-md border-b border-border",
       ].join(" ")}
     >
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
+      <div className="mx-auto max-w-7xl px-6 lg:px-14">
+        <div className="flex h-18 items-center justify-between">
           {/* Logo */}
           <a
             href="/"
-            className="font-display font-black text-xl tracking-tight text-foreground"
+            className="font-display font-bold text-2xl tracking-tight text-foreground"
+            style={{ letterSpacing: "-0.02em" }}
           >
-            Nearly.
+            Nearly<span className="text-primary">.</span>
           </a>
 
           {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-8">
+          <nav className="hidden md:flex items-center gap-9">
             {navLinks.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
-                className="text-sm font-semibold text-foreground/70 hover:text-foreground transition-colors"
+                className="text-[0.88rem] font-medium text-muted-foreground hover:text-foreground transition-colors"
               >
                 {link.label}
               </a>
             ))}
           </nav>
 
-          {/* CTA */}
-          <div className="hidden md:flex items-center gap-3">
+          {/* CTA pill */}
+          <div className="hidden md:flex items-center">
             <a
-              href="#login"
-              className="text-sm font-semibold text-foreground/70 hover:text-foreground transition-colors"
+              href="#"
+              className="text-[0.82rem] font-semibold bg-primary text-white px-6 py-2.5 rounded-full hover:bg-foreground transition-colors"
             >
-              Log in
+              Find Help Nearby
             </a>
-            <Button size="sm">Get Help Now</Button>
           </div>
 
           {/* Mobile toggle */}
@@ -87,13 +86,13 @@ export default function Navbar() {
               {link.label}
             </a>
           ))}
-          <div className="pt-2 flex flex-col gap-2">
-            <Button variant="outline" size="sm" className="w-full">
-              Log in
-            </Button>
-            <Button size="sm" className="w-full">
-              Get Help Now
-            </Button>
+          <div className="pt-2">
+            <a
+              href="#"
+              className="block text-center text-sm font-semibold bg-primary text-white px-6 py-2.5 rounded-full hover:bg-foreground transition-colors w-full"
+            >
+              Find Help Nearby
+            </a>
           </div>
         </motion.div>
       )}
