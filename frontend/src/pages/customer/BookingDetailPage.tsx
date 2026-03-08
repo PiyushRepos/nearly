@@ -212,7 +212,7 @@ function CancelDialog({
   const handleCancel = async () => {
     try {
       setLoading(true);
-      await api.patch(`/bookings/${bookingId}/cancel`);
+      await api.patch(`/customer/bookings/${bookingId}/cancel`);
       onCancelled();
     } finally {
       setLoading(false);
@@ -266,7 +266,7 @@ export default function CustomerBookingDetailPage() {
     data: booking,
     isLoading,
     mutate,
-  } = useSWR(id ? `/bookings/${id}` : null, fetchBooking, {
+  } = useSWR(id ? `/customer/bookings/${id}` : null, fetchBooking, {
     refreshInterval: (data) => (data && isActive(data.status) ? 8_000 : 0),
   });
 

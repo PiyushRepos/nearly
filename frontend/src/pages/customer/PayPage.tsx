@@ -43,7 +43,7 @@ export default function PayPage() {
   const [error, setError] = useState<string | null>(null);
 
   const { data: booking, isLoading } = useSWR(
-    id ? `/bookings/${id}` : null,
+    id ? `/customer/bookings/${id}` : null,
     fetchBooking,
   );
 

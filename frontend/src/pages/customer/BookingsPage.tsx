@@ -59,10 +59,10 @@ async function fetchBookings(url: string): Promise<ListResponse<Booking>> {
 
 function buildQuery(tab: string): string {
   if (tab === "active")
-    return "/bookings?status=requested,confirmed,in_progress";
-  if (tab === "completed") return "/bookings?status=completed";
-  if (tab === "cancelled") return "/bookings?status=cancelled";
-  return "/bookings";
+    return "/customer/bookings?status=requested,confirmed,in_progress";
+  if (tab === "completed") return "/customer/bookings?status=completed";
+  if (tab === "cancelled") return "/customer/bookings?status=cancelled";
+  return "/customer/bookings";
 }
 
 // ─── Booking card ─────────────────────────────────────────────────────────────

@@ -75,7 +75,7 @@ export default function CustomerReviewPage() {
   const [submitted, setSubmitted] = useState(false);
 
   const { data: booking, isLoading } = useSWR(
-    id ? `/bookings/${id}` : null,
+    id ? `/customer/bookings/${id}` : null,
     fetchBooking,
   );
 
