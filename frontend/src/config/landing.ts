@@ -45,10 +45,10 @@ export interface FooterColumn {
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
 export const navLinks: NavLink[] = [
-  { label: "For Homeowners", href: "#homeowners" },
-  { label: "For Professionals", href: "#professionals" },
-  { label: "Why Nearly", href: "#why" },
-  { label: "Stories", href: "#testimonials" },
+  { label: "For Homeowners", href: "/#customers" },
+  { label: "For Professionals", href: "/#professionals" },
+  { label: "Why Nearly", href: "/#why" },
+  { label: "Stories", href: "/#testimonials" },
 ];
 
 export const trustStats: TrustStat[] = [
@@ -160,19 +160,19 @@ export const footerColumns: FooterColumn[] = [
   {
     heading: "For Homeowners",
     links: [
-      { label: "Browse Services", href: "#" },
-      { label: "How Booking Works", href: "#" },
-      { label: "Cities We Cover", href: "#" },
-      { label: "Pricing Guide", href: "#" },
+      { label: "Browse Services", href: "/browse" },
+      { label: "How Booking Works", href: "/#customers" },
+      { label: "Cities We Cover", href: "/browse" },
+      { label: "Pricing Guide", href: "/browse" },
     ],
   },
   {
     heading: "For Professionals",
     links: [
-      { label: "Join Nearly", href: "#" },
-      { label: "How It Works for You", href: "#" },
-      { label: "Verification Process", href: "#" },
-      { label: "Getting Paid", href: "#" },
+      { label: "Join Nearly", href: "/auth/signup" },
+      { label: "How It Works for You", href: "/#professionals" },
+      { label: "Verification Process", href: "/auth/signup" },
+      { label: "Getting Paid", href: "/auth/signup" },
     ],
   },
   {
