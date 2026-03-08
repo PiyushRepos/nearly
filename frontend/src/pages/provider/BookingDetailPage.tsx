@@ -14,6 +14,7 @@ import {
   FlagTriangleRight,
   Loader2,
   PlusCircle,
+  BadgeCheck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -414,37 +415,55 @@ export default function ProviderBookingDetailPage() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            {booking.updates.map((upd) => (
-              <div
-                key={upd.id}
-                className="rounded-xl bg-muted/30 border border-border px-3 py-2.5"
-              >
-                {upd.message && (
-                  <p className="text-sm text-foreground">{upd.message}</p>
-                )}
-                {upd.images?.length > 0 && (
-                  <div className="flex gap-1.5 mt-2 flex-wrap">
-                    {upd.images.map((img, i) => (
-                      <a
-                        key={i}
-                        href={img}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <img
-                          src={img}
-                          className="size-14 rounded-md object-cover hover:opacity-80"
-                          alt=""
-                        />
-                      </a>
-                    ))}
-                  </div>
-                )}
-                <p className="text-[10px] text-muted-foreground mt-1.5">
-                  {new Date(upd.createdAt).toLocaleString("en-IN")}
-                </p>
-              </div>
-            ))}
+            {booking.updates.map((upd) => {
+              const isPaid = booking.paymentStatus === "paid";
+              const isPayPrompt =
+                isPaid &&
+                upd.message !== null &&
+                /please pay/i.test(upd.message);
+              const displayMessage = isPayPrompt
+                ? "Work is complete! Payment received."
+                : upd.message;
+
+              return (
+                <div
+                  key={upd.id}
+                  className="rounded-xl bg-muted/30 border border-border px-3 py-2.5"
+                >
+                  {displayMessage && (
+                    <div className="flex items-start gap-1.5">
+                      {isPayPrompt && (
+                        <BadgeCheck className="size-3.5 text-emerald-500 shrink-0 mt-0.5" />
+                      )}
+                      <p className="text-sm text-foreground">
+                        {displayMessage}
+                      </p>
+                    </div>
+                  )}
+                  {upd.images?.length > 0 && (
+                    <div className="flex gap-1.5 mt-2 flex-wrap">
+                      {upd.images.map((img, i) => (
+                        <a
+                          key={i}
+                          href={img}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <img
+                            src={img}
+                            className="size-14 rounded-md object-cover hover:opacity-80"
+                            alt=""
+                          />
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                  <p className="text-[10px] text-muted-foreground mt-1.5">
+                    {new Date(upd.createdAt).toLocaleString("en-IN")}
+                  </p>
+                </div>
+              );
+            })}
           </CardContent>
         </Card>
       )}

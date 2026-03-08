@@ -53,13 +53,29 @@ const STATUS_LABELS: Record<BookingStatus, string> = {
   cancelled: "Cancelled",
 };
 
-const STATUS_DESCRIPTIONS: Record<BookingStatus, string> = {
-  requested: "Waiting for the professional to confirm your booking.",
-  confirmed: "The professional has confirmed and will arrive as scheduled.",
-  in_progress: "Service is currently underway.",
-  completed: "Service completed successfully.",
-  cancelled: "This booking was cancelled.",
-};
+function getStatusDescription(
+  status: BookingStatus,
+  paymentStatus?: string,
+): string {
+  if (status === "completed" && paymentStatus === "paid") {
+    return "Service completed and payment received.";
+  }
+  const map: Record<BookingStatus, string> = {
+    requested: "Waiting for the professional to confirm your booking.",
+    confirmed: "The professional has confirmed and will arrive as scheduled.",
+    in_progress: "Service is currently underway.",
+    completed: "Service completed successfully.",
+    cancelled: "This booking was cancelled.",
+  };
+  return map[status];
+}
+
+function resolveUpdateMessage(message: string, isPaid: boolean): string {
+  if (isPaid && /please pay/i.test(message)) {
+    return "Work is complete! Payment received.";
+  }
+  return message;
+}
 
 // ─── Fetcher ──────────────────────────────────────────────────────────────────
 
@@ -73,6 +89,7 @@ async function fetchBooking(url: string): Promise<Booking> {
 function BookingTimeline({ booking }: { booking: Booking }) {
   const cancelled = booking.status === "cancelled";
   const currentIdx = cancelled ? -1 : ALL_STATUSES.indexOf(booking.status);
+  const isPaid = booking.paymentStatus === "paid";
 
   return (
     <div className="space-y-0">
@@ -148,7 +165,7 @@ function BookingTimeline({ booking }: { booking: Booking }) {
                   )}
                 </div>
                 <p className="text-xs text-muted-foreground mt-0.5">
-                  {STATUS_DESCRIPTIONS[status]}
+                  {getStatusDescription(status, booking.paymentStatus)}
                 </p>
 
                 {/* Work updates for this status */}
@@ -161,7 +178,7 @@ function BookingTimeline({ booking }: { booking: Booking }) {
                       >
                         {upd.message && (
                           <p className="text-xs text-foreground">
-                            {upd.message}
+                            {resolveUpdateMessage(upd.message, isPaid)}
                           </p>
                         )}
                         {upd.images?.length > 0 && (

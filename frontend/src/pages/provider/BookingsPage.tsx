@@ -41,10 +41,10 @@ const STATUS_CONFIG: Record<
 };
 
 const TABS = [
+  { value: "all", label: "All" },
   { value: "pending", label: "Pending" },
   { value: "active", label: "Active" },
   { value: "completed", label: "Completed" },
-  { value: "all", label: "All" },
 ] as const;
 
 async function fetchBookings(url: string): Promise<ListResponse<Booking>> {
