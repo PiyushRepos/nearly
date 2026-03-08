@@ -17,7 +17,7 @@ const proofItems = [
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen bg-[#fdfaf6] flex flex-col items-center justify-center overflow-hidden pt-18 pb-24 px-10 text-center">
+    <section className="relative min-h-screen bg-[#fdfaf6] flex flex-col items-center justify-center overflow-hidden pt-28 pb-24 px-10 text-center">
       {/* Background blobs */}
       <div
         aria-hidden
