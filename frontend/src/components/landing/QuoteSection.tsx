@@ -7,24 +7,21 @@ export default function QuoteSection() {
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section className="bg-white py-24 md:py-32">
-      <div className="mx-auto max-w-4xl px-6 lg:px-8 text-center" ref={ref}>
+    <section className="bg-[#f7f3ee] border-y border-border py-24 md:py-28">
+      <div className="mx-auto max-w-[760px] px-6 lg:px-8 text-center" ref={ref}>
         <motion.p
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="font-display text-[clamp(1.5rem,3.5vw,2.4rem)] font-bold leading-[1.3] text-foreground"
+          className="font-display text-[clamp(1.6rem,3vw,2.8rem)] font-light italic leading-[1.5] text-foreground"
         >
           Getting something fixed at home shouldn't feel like a part-time job.
-          No cold calls.{" "}
-          <span className="italic text-foreground/45">
-            No "I'll check and get back to you."
-          </span>{" "}
-          No showing up three hours late with no explanation.{" "}
-          <span className="text-primary font-black">
+          No cold calls. No &ldquo;I'll check and get back to you.&rdquo; No
+          showing up three hours late with no explanation.{" "}
+          <strong className="not-italic font-bold text-primary">
             Just good people doing good work — and you knowing exactly what's
             happening, every step of the way.
-          </span>
+          </strong>
         </motion.p>
       </div>
     </section>
