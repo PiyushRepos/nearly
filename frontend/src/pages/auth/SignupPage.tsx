@@ -99,6 +99,7 @@ export default function SignupPage() {
       password: values.password,
       ...(values.role && { role: values.role }),
       ...(values.phone && { phone: values.phone }),
+      callbackURL: "/",
     } as Parameters<typeof signUp.email>[0]);
 
     if (error) {

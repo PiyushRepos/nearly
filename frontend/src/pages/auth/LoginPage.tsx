@@ -44,6 +44,7 @@ export default function LoginPage() {
     const { data, error } = await signIn.email({
       email: values.email,
       password: values.password,
+      callbackURL: from || "/",
     });
 
     if (error) {
