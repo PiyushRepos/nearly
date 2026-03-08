@@ -15,7 +15,7 @@ const items = [
 
 export default function CategoryMarquee() {
   return (
-    <div className="w-full bg-primary overflow-hidden py-[50px]">
+    <div className="w-full bg-primary overflow-hidden py-12.5">
       <Marquee speed={40} gradient={false} pauseOnHover>
         {[...items, ...items].map((item, i) => (
           <span
@@ -27,7 +27,11 @@ export default function CategoryMarquee() {
               color: item.bold ? "white" : "rgba(255,255,255,0.75)",
             }}
           >
-            {item.bold ? <strong className="not-italic font-bold">{item.text}</strong> : item.text}
+            {item.bold ? (
+              <strong className="not-italic font-bold">{item.text}</strong>
+            ) : (
+              item.text
+            )}
           </span>
         ))}
       </Marquee>

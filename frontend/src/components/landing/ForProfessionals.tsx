@@ -35,19 +35,19 @@ export default function ForProfessionals() {
   return (
     <section
       id="professionals"
-      className="bg-foreground py-[120px] overflow-hidden relative"
+      className="bg-foreground py-30 overflow-hidden relative"
     >
       {/* Decorative radial */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -top-48 -right-48 w-[700px] h-[700px] rounded-full"
+        className="pointer-events-none absolute -top-48 -right-48 w-175 h-175 rounded-full"
         style={{
           background:
             "radial-gradient(circle, rgba(46,93,75,0.25), transparent)",
         }}
       />
 
-      <div className="mx-auto max-w-[1100px] px-6 lg:px-14" ref={ref}>
+      <div className="mx-auto max-w-275 px-6 lg:px-14" ref={ref}>
         <div className="grid lg:grid-cols-2 gap-20 items-center">
           {/* Left: cards */}
           <motion.div
@@ -56,7 +56,7 @@ export default function ForProfessionals() {
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           >
             {/* Income card */}
-            <div className="bg-white/[0.05] border border-white/10 rounded-2xl p-9">
+            <div className="bg-white/5 border border-white/10 rounded-2xl p-9">
               <p className="font-display font-light italic text-[0.8rem] text-white/30 mb-5">
                 This week · Sunita Lal · Home Cleaning
               </p>
@@ -155,7 +155,7 @@ export default function ForProfessionals() {
               initial={{ opacity: 0, y: 12 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: 0.5 }}
-              className="inline-block text-[0.92rem] font-semibold bg-secondary text-white px-9 py-[15px] rounded-full hover:bg-[#3a7a62] transition-all hover:-translate-y-0.5 shadow-[0_4px_20px_rgba(46,93,75,0.4)]"
+              className="inline-block text-[0.92rem] font-semibold bg-secondary text-white px-9 py-3.75 rounded-full hover:bg-[#3a7a62] transition-all hover:-translate-y-0.5 shadow-[0_4px_20px_rgba(46,93,75,0.4)]"
             >
               Start Taking Bookings
             </motion.a>

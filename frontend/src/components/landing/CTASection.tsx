@@ -1,74 +1,67 @@
 import { useRef } from "react";
 import { motion, useInView } from "motion/react";
-import { ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 export default function CTASection() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section className="relative bg-brand-green overflow-hidden py-28 md:py-36">
-      {/* Decorative blobs */}
-      <div aria-hidden className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-primary/15 blur-3xl" />
-        <div className="absolute -bottom-24 -right-24 w-96 h-96 rounded-full bg-primary/10 blur-3xl" />
-      </div>
-
-      <div
-        className="relative mx-auto max-w-3xl px-6 lg:px-8 text-center"
-        ref={ref}
+    <section className="relative bg-primary overflow-hidden py-[140px] text-center">
+      {/* Watermark */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute font-display font-black italic text-white/[0.06] whitespace-nowrap select-none"
+        style={{
+          fontSize: "20vw",
+          bottom: "-3vw",
+          left: "50%",
+          transform: "translateX(-50%)",
+        }}
       >
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-          className="text-xs font-bold uppercase tracking-widest text-primary mb-4"
-        >
-          So, what's stopping you?
-        </motion.p>
+        nearly
+      </span>
 
+      <div className="relative mx-auto max-w-3xl px-6 lg:px-8" ref={ref}>
         <motion.h2
           initial={{ opacity: 0, y: 24 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.65, delay: 0.06 }}
-          className="font-display text-[clamp(2.4rem,6vw,4.5rem)] font-black leading-[1.05] tracking-tight text-white"
+          className="font-display text-[clamp(2.2rem,4.5vw,4rem)] font-bold leading-[1.1] tracking-[-0.03em] text-white max-w-[620px] mx-auto mb-5"
         >
           That thing on your list?
           <br />
-          <span className="italic text-primary">It's time.</span>
+          <em className="font-light text-white/65">It's time.</em>
         </motion.h2>
 
         <motion.p
           initial={{ opacity: 0, y: 16 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.15 }}
-          className="mt-6 text-base text-white/55 leading-relaxed max-w-lg mx-auto"
+          className="text-base font-light text-white/65 leading-relaxed max-w-[440px] mx-auto mb-12"
         >
-          Whether you're one job away from a fixed drain or a fresh coat of
-          paint — we've got someone for that. Book in under 2 minutes.
+          Whether it's been on your to-do list for a week or honestly a year —
+          the right person is nearby, available, and ready. Booking takes two
+          minutes.
         </motion.p>
 
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5, delay: 0.25 }}
-          className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3"
+          className="flex flex-col sm:flex-row items-center justify-center gap-3 flex-wrap"
         >
-          <Button
-            size="xl"
-            className="bg-white text-brand-green hover:bg-white/92 font-bold gap-2 w-full sm:w-auto"
+          <a
+            href="#"
+            className="text-[0.92rem] font-semibold bg-white text-primary px-10 py-4 rounded-full hover:bg-foreground hover:text-white transition-all hover:-translate-y-0.5 shadow-[0_4px_20px_rgba(0,0,0,0.15)] m-1.5"
           >
             Find Help Near Me
-            <ArrowRight size={16} />
-          </Button>
-          <Button
-            variant="outline-cream"
-            size="xl"
-            className="w-full sm:w-auto"
+          </a>
+          <a
+            href="#professionals"
+            className="text-[0.92rem] font-medium text-white px-9 py-4 rounded-full border border-white/40 hover:border-white hover:bg-white/10 transition-all m-1.5"
           >
             I'm a Professional
-          </Button>
+          </a>
         </motion.div>
       </div>
     </section>

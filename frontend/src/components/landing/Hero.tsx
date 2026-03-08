@@ -17,13 +17,26 @@ const proofItems = [
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen bg-[#fdfaf6] flex flex-col items-center justify-center overflow-hidden pt-[72px] pb-24 px-10 text-center">
+    <section className="relative min-h-screen bg-[#fdfaf6] flex flex-col items-center justify-center overflow-hidden pt-18 pb-24 px-10 text-center">
       {/* Background blobs */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -top-24 -left-24 w-[600px] h-[600px] rounded-full opacity-35"
-          style={{ background: "radial-gradient(circle, #f2d4c8, transparent)", filter: "blur(80px)" }} />
-        <div className="absolute -bottom-20 -right-20 w-[500px] h-[500px] rounded-full opacity-35"
-          style={{ background: "radial-gradient(circle, #d4e8e0, transparent)", filter: "blur(80px)" }} />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 overflow-hidden"
+      >
+        <div
+          className="absolute -top-24 -left-24 w-150 h-150 rounded-full opacity-35"
+          style={{
+            background: "radial-gradient(circle, #f2d4c8, transparent)",
+            filter: "blur(80px)",
+          }}
+        />
+        <div
+          className="absolute -bottom-20 -right-20 w-125 h-125 rounded-full opacity-35"
+          style={{
+            background: "radial-gradient(circle, #d4e8e0, transparent)",
+            filter: "blur(80px)",
+          }}
+        />
       </div>
 
       {/* Nudge pill */}
@@ -44,11 +57,11 @@ export default function Hero() {
         initial="hidden"
         animate="show"
         custom={0.1}
-        className="relative font-display font-black text-[clamp(3rem,6.5vw,6.2rem)] leading-[1.0] tracking-[-0.03em] text-foreground max-w-[820px] mb-7"
+        className="relative font-display font-black text-[clamp(3rem,6.5vw,6.2rem)] leading-none tracking-[-0.03em] text-foreground max-w-205 mb-7"
       >
         The help you need
         <br />
-        is <em className="italic font-light text-primary not-italic" style={{ fontStyle: "italic", fontWeight: 300 }}>already nearby.</em>
+        is <em className="font-light text-primary">already nearby.</em>
       </motion.h1>
 
       {/* Sub */}
@@ -57,7 +70,7 @@ export default function Hero() {
         initial="hidden"
         animate="show"
         custom={0.2}
-        className="relative text-[1.1rem] font-light text-muted-foreground leading-[1.75] max-w-[500px] mx-auto mb-11"
+        className="relative text-[1.1rem] font-light text-muted-foreground leading-[1.75] max-w-125 mx-auto mb-11"
       >
         Nearly connects you with skilled local professionals — for cleaning,
         repairs, and everything in between. Book in minutes. Track every step.
@@ -74,13 +87,13 @@ export default function Hero() {
       >
         <a
           href="#"
-          className="text-[0.92rem] font-semibold bg-primary text-white px-9 py-[15px] rounded-full hover:bg-foreground transition-all hover:-translate-y-0.5 shadow-[0_4px_20px_rgba(200,96,58,0.25)]"
+          className="text-[0.92rem] font-semibold bg-primary text-white px-9 py-3.75 rounded-full hover:bg-foreground transition-all hover:-translate-y-0.5 shadow-[0_4px_20px_rgba(200,96,58,0.25)]"
         >
           Find a Professional
         </a>
         <a
           href="#professionals"
-          className="text-[0.92rem] font-medium text-foreground px-7 py-[15px] rounded-full border border-border hover:border-foreground hover:bg-[#f7f3ee] transition-all"
+          className="text-[0.92rem] font-medium text-foreground px-7 py-3.75 rounded-full border border-border hover:border-foreground hover:bg-[#f7f3ee] transition-all"
         >
           Grow your bookings →
         </a>
@@ -92,14 +105,20 @@ export default function Hero() {
         initial="hidden"
         animate="show"
         custom={0.4}
-        className="relative mt-[72px] flex flex-wrap items-center justify-center gap-8"
+        className="relative mt-18 flex flex-wrap items-center justify-center gap-8"
       >
         {proofItems.map((item, i) => (
           <>
             {i > 0 && (
-              <span key={`div-${i}`} className="w-px h-5 bg-border hidden sm:block" />
+              <span
+                key={`div-${i}`}
+                className="w-px h-5 bg-border hidden sm:block"
+              />
             )}
-            <div key={item.label} className="flex items-center gap-2.5 text-[0.82rem] text-muted-foreground font-normal">
+            <div
+              key={item.label}
+              className="flex items-center gap-2.5 text-[0.82rem] text-muted-foreground font-normal"
+            >
               <span className="text-base leading-none">{item.icon}</span>
               {item.label}
             </div>

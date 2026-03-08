@@ -1,57 +1,47 @@
 import { useRef } from "react";
 import { motion, useInView } from "motion/react";
-import { Star } from "lucide-react";
 import { testimonials } from "@/config/landing";
-
-function StarRating({ count }: { count: number }) {
-  return (
-    <div className="flex gap-0.5">
-      {Array.from({ length: count }).map((_, i) => (
-        <Star key={i} size={14} className="fill-amber-400 text-amber-400" />
-      ))}
-    </div>
-  );
-}
 
 export default function Testimonials() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section id="testimonials" className="bg-brand-cream py-24 md:py-32">
+    <section id="testimonials" className="bg-[#fdfaf6] py-30">
       <div className="mx-auto max-w-7xl px-6 lg:px-8" ref={ref}>
-        {/* Header */}
-        <div className="text-center max-w-xl mx-auto mb-16">
-          <motion.p
+        {/* Intro - left-aligned */}
+        <div className="max-w-130 mb-16">
+          <motion.span
             initial={{ opacity: 0, y: 16 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.5 }}
-            className="text-xs font-bold uppercase tracking-widest text-primary mb-3"
+            className="inline-block text-[0.72rem] font-bold uppercase tracking-[0.12em] text-primary bg-primary/10 px-3.5 py-1 rounded-full mb-4"
           >
-            Stories
-          </motion.p>
+            Real Stories
+          </motion.span>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.06 }}
-            className="font-display text-[clamp(1.8rem,3.5vw,2.8rem)] font-black leading-tight text-foreground"
+            className="font-display text-[clamp(1.8rem,3.5vw,2.8rem)] font-bold leading-tight tracking-[-0.03em] text-foreground mb-4"
           >
-            Honestly?{" "}
-            <span className="italic text-primary">People really like us.</span>
+            Honestly?
+            <br />
+            <em className="font-light text-primary">People really like us.</em>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.12 }}
-            className="mt-4 text-base text-foreground/55 leading-relaxed"
+            className="text-base font-light text-muted-foreground leading-relaxed max-w-100"
           >
-            Real customers, real professionals, real stories. No marketing
-            fluff.
+            We'll let our customers and professionals do the talking. Every word
+            below is from a verified, real booking.
           </motion.p>
         </div>
 
         {/* Cards */}
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-3 gap-5">
           {testimonials.map((t, i) => (
             <motion.div
               key={t.name}
@@ -62,21 +52,27 @@ export default function Testimonials() {
                 delay: 0.1 + i * 0.12,
                 ease: [0.22, 1, 0.36, 1],
               }}
-              className="bg-white rounded-2xl p-7 border border-border flex flex-col gap-5 shadow-xs hover:shadow-sm transition-shadow"
+              className="bg-[#f7f3ee] rounded-2xl px-7 py-8 border border-border hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(0,0,0,0.08)] transition-all"
             >
-              <StarRating count={t.rating} />
-              <p className="text-sm text-foreground/70 leading-relaxed flex-1">
-                "{t.text}"
+              <div className="text-[#c49a3c] text-[0.85rem] tracking-[2px] mb-4">
+                {"★".repeat(t.rating)}
+              </div>
+              <p className="font-display font-light italic text-[1rem] text-foreground leading-[1.7] mb-6">
+                &ldquo;{t.text}&rdquo;
               </p>
-              <div className="flex items-center gap-3 pt-2 border-t border-border">
+              <div className="flex items-center gap-3">
                 <span
-                  className={`size-9 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${t.color}`}
+                  className={`size-9 rounded-full flex items-center justify-center text-[0.8rem] font-bold shrink-0 ${t.color}`}
                 >
                   {t.initials}
                 </span>
                 <div>
-                  <p className="text-sm font-bold text-foreground">{t.name}</p>
-                  <p className="text-xs text-foreground/45">{t.role}</p>
+                  <p className="text-[0.85rem] font-semibold text-foreground">
+                    {t.name}
+                  </p>
+                  <p className="text-[0.75rem] text-muted-foreground mt-0.5">
+                    {t.role}
+                  </p>
                 </div>
               </div>
             </motion.div>

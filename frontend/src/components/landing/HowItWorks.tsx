@@ -33,8 +33,8 @@ export default function HowItWorks() {
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section id="customers" className="bg-[#fdfaf6] py-[120px]">
-      <div className="mx-auto max-w-[1100px] px-6 lg:px-14" ref={ref}>
+    <section id="customers" className="bg-[#fdfaf6] py-30">
+      <div className="mx-auto max-w-275 px-6 lg:px-14" ref={ref}>
         <div className="grid lg:grid-cols-2 gap-20 items-center">
           {/* Left: copy */}
           <div>
@@ -79,7 +79,7 @@ export default function HowItWorks() {
                   transition={{ duration: 0.5, delay: 0.15 + i * 0.07 }}
                   className="flex items-start gap-3.5 text-[0.92rem] text-foreground leading-[1.55]"
                 >
-                  <span className="size-[30px] shrink-0 rounded-full bg-primary/10 text-primary flex items-center justify-center text-[0.8rem] mt-0.5">
+                  <span className="size-7.5 shrink-0 rounded-full bg-primary/10 text-primary flex items-center justify-center text-[0.8rem] mt-0.5">
                     {point.icon}
                   </span>
                   <span>{point.text}</span>
@@ -92,7 +92,7 @@ export default function HowItWorks() {
               initial={{ opacity: 0, y: 12 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: 0.5 }}
-              className="inline-block text-[0.92rem] font-semibold bg-primary text-white px-9 py-[15px] rounded-full hover:bg-foreground transition-all hover:-translate-y-0.5 shadow-[0_4px_20px_rgba(200,96,58,0.25)]"
+              className="inline-block text-[0.92rem] font-semibold bg-primary text-white px-9 py-3.75 rounded-full hover:bg-foreground transition-all hover:-translate-y-0.5 shadow-[0_4px_20px_rgba(200,96,58,0.25)]"
             >
               Book Your First Service
             </motion.a>
@@ -105,7 +105,7 @@ export default function HowItWorks() {
             transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
             className="bg-foreground rounded-2xl p-9 shadow-2xl"
           >
-            <p className="text-[0.72rem] font-semibold uppercase tracking-[0.1em] text-white/30 mb-5">
+            <p className="text-[0.72rem] font-semibold uppercase tracking-widest text-white/30 mb-5">
               Your Booking · Live
             </p>
 
@@ -113,7 +113,7 @@ export default function HowItWorks() {
               {timelineSteps.map((step, i) => (
                 <div
                   key={i}
-                  className="flex items-center gap-3.5 py-3 border-b border-white/[0.08] last:border-0"
+                  className="flex items-center gap-3.5 py-3 border-b border-white/8 last:border-0"
                 >
                   <span
                     className={[
@@ -121,8 +121,8 @@ export default function HowItWorks() {
                       step.state === "done"
                         ? "bg-[#5cb88a]"
                         : step.state === "now"
-                        ? "bg-[#c49a3c] animate-pulse"
-                        : "bg-white/20",
+                          ? "bg-[#c49a3c] animate-pulse"
+                          : "bg-white/20",
                     ].join(" ")}
                   />
                   <span
@@ -131,8 +131,8 @@ export default function HowItWorks() {
                       step.state === "done"
                         ? "text-white/90"
                         : step.state === "now"
-                        ? "text-[#c49a3c] font-semibold"
-                        : "text-white/55",
+                          ? "text-[#c49a3c] font-semibold"
+                          : "text-white/55",
                     ].join(" ")}
                   >
                     {step.label}
@@ -146,7 +146,7 @@ export default function HowItWorks() {
 
             <div className="mt-6 pt-5 border-t border-white/[0.07]">
               <div className="bg-white/[0.07] rounded-[14px] px-4 py-3.5 max-w-[90%]">
-                <p className="text-[0.82rem] text-white/70 leading-[1.5]">
+                <p className="text-[0.82rem] text-white/70 leading-normal">
                   "I've uploaded before photos and should arrive by 11 AM. See
                   you soon!"
                 </p>

@@ -13,7 +13,7 @@ export default function QuoteSection() {
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="font-display text-[clamp(1.6rem,3vw,2.8rem)] font-light italic leading-[1.5] text-foreground"
+          className="font-display text-[clamp(1.6rem,3vw,2.8rem)] font-light italic leading-normal text-foreground"
         >
           Getting something fixed at home shouldn't feel like a part-time job.
           No cold calls. No &ldquo;I'll check and get back to you.&rdquo; No

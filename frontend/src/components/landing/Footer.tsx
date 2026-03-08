@@ -2,63 +2,67 @@ import { footerColumns } from "@/config/landing";
 
 export default function Footer() {
   return (
-    <footer className="bg-foreground text-background">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-10">
+    <footer className="bg-foreground text-white">
+      <div className="mx-auto max-w-7xl px-6 lg:px-14 pt-15 pb-9">
+        {/* Top row */}
+        <div className="flex flex-wrap justify-between items-start gap-10 pb-10 border-b border-white/8">
           {/* Brand */}
-          <div className="col-span-2 md:col-span-1">
+          <div>
             <a
               href="/"
-              className="font-display font-black text-xl tracking-tight"
+              className="font-display font-bold text-[1.4rem] text-white block mb-2.5"
             >
-              Nearly.
+              Nearly<span className="text-primary">.</span>
             </a>
-            <p className="mt-3 text-xs text-background/45 leading-relaxed max-w-45">
-              Local services, booked in minutes. Done right, every time.
+            <p className="text-[0.82rem] font-light text-white/45 leading-relaxed max-w-50">
+              Local services, handled warmly — from the first request to the
+              final review.
             </p>
-            <div className="mt-5 flex gap-3">
-              {["𝕏", "in", "ig"].map((s) => (
-                <a
-                  key={s}
-                  href="#"
-                  className="text-xs font-bold text-background/35 hover:text-background transition-colors"
-                >
-                  {s}
-                </a>
-              ))}
-            </div>
           </div>
 
           {/* Link columns */}
-          {footerColumns.map((col) => (
-            <div key={col.heading}>
-              <h4 className="text-xs font-bold uppercase tracking-widest text-background/35 mb-4">
-                {col.heading}
-              </h4>
-              <ul className="space-y-2.5">
-                {col.links.map((link) => (
-                  <li key={link.label}>
-                    <a
-                      href={link.href}
-                      className="text-sm text-background/60 hover:text-background transition-colors"
-                    >
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          <div className="flex flex-wrap gap-10">
+            {footerColumns.map((col) => (
+              <div key={col.heading}>
+                <h5 className="text-[0.72rem] font-bold uppercase tracking-widest text-white/60 mb-4">
+                  {col.heading}
+                </h5>
+                <ul className="space-y-2.5">
+                  {col.links.map((link) => (
+                    <li key={link.label}>
+                      <a
+                        href={link.href}
+                        className="text-[0.85rem] font-light text-white/35 hover:text-white/80 transition-colors block"
+                      >
+                        {link.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-14 pt-6 border-t border-background/10 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-background/30">
-            © 2026 Nearly. All rights reserved.
-          </p>
-          <p className="text-xs text-background/25">
-            Made with care for people who just want things done.
-          </p>
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-7">
+          <span className="text-[0.75rem] text-white/25">
+            © 2025 Nearly. Made with care for the people who fix things.
+          </span>
+          <div className="flex gap-5">
+            <a
+              href="#"
+              className="text-[0.75rem] text-white/25 hover:text-white/60 transition-colors"
+            >
+              Privacy
+            </a>
+            <a
+              href="#"
+              className="text-[0.75rem] text-white/25 hover:text-white/60 transition-colors"
+            >
+              Terms
+            </a>
+          </div>
         </div>
       </div>
     </footer>
