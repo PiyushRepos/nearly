@@ -58,7 +58,7 @@ const providerNav = [
 ];
 
 const adminNav = [
-  { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
+  { label: "Dashboard", href: "/admin", icon: LayoutDashboard, exact: true },
   { label: "Providers", href: "/admin/providers", icon: ShieldCheck },
   { label: "Categories", href: "/admin/categories", icon: Tag },
   { label: "Reviews", href: "/admin/reviews", icon: Star },
@@ -133,8 +133,9 @@ export default function AppLayout() {
                 {navItems.map((item) => {
                   const isActive =
                     location.pathname === item.href ||
-                    (item.href !== "/" &&
-                      location.pathname.startsWith(item.href));
+                    (!(item as { exact?: boolean }).exact &&
+                      item.href !== "/" &&
+                      location.pathname.startsWith(item.href + "/"));
                   return (
                     <SidebarMenuItem key={item.href}>
                       <SidebarMenuButton

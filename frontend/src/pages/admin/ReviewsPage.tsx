@@ -194,7 +194,7 @@ function ReviewList({ url }: { url: string }) {
 }
 
 export default function AdminReviewsPage() {
-  const [tab, setTab] = useState("pending");
+  const [tab, setTab] = useState("all");
 
   return (
     <div className="space-y-5">
@@ -212,6 +212,12 @@ export default function AdminReviewsPage() {
       <Tabs value={tab} onValueChange={setTab}>
         <TabsList variant="line" className="mb-5 gap-0.5 p-0 h-auto">
           <TabsTrigger
+            value="all"
+            className="rounded-full px-4 py-1.5 h-auto text-sm after:hidden data-[state=active]:bg-(--brand-orange)/10 data-[state=active]:text-brand-orange data-[state=active]:shadow-none data-active:bg-(--brand-orange)/10 data-active:text-brand-orange"
+          >
+            All Reviews
+          </TabsTrigger>
+          <TabsTrigger
             value="pending"
             className="rounded-full px-4 py-1.5 h-auto text-sm after:hidden data-[state=active]:bg-(--brand-orange)/10 data-[state=active]:text-brand-orange data-[state=active]:shadow-none data-active:bg-(--brand-orange)/10 data-active:text-brand-orange"
           >
@@ -222,12 +228,6 @@ export default function AdminReviewsPage() {
             className="rounded-full px-4 py-1.5 h-auto text-sm after:hidden data-[state=active]:bg-(--brand-orange)/10 data-[state=active]:text-brand-orange data-[state=active]:shadow-none data-active:bg-(--brand-orange)/10 data-active:text-brand-orange"
           >
             Flagged
-          </TabsTrigger>
-          <TabsTrigger
-            value="all"
-            className="rounded-full px-4 py-1.5 h-auto text-sm after:hidden data-[state=active]:bg-(--brand-orange)/10 data-[state=active]:text-brand-orange data-[state=active]:shadow-none data-active:bg-(--brand-orange)/10 data-active:text-brand-orange"
-          >
-            All Reviews
           </TabsTrigger>
         </TabsList>
         <TabsContent value="pending">

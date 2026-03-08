@@ -40,10 +40,14 @@ export async function seedAdmin(req, res, next) {
 // ─── GET /api/admin/providers?status=pending ──────────────────────────────────
 export async function getPendingProviders(req, res, next) {
   try {
-    const { status = "pending", page = "1", limit = "20" } = req.query;
+    const { status, page = "1", limit = "20" } = req.query;
     const offset = (parseInt(page) - 1) * parseInt(limit);
 
-    const isApproved = status === "approved";
+    // Only filter by approval status when ?status= is explicitly provided
+    const conditions =
+      status !== undefined
+        ? [eq(providerProfiles.isApproved, status === "approved")]
+        : [];
 
     const data = await db
       .select({
@@ -61,7 +65,7 @@ export async function getPendingProviders(req, res, next) {
       })
       .from(providerProfiles)
       .innerJoin(user, eq(providerProfiles.userId, user.id))
-      .where(eq(providerProfiles.isApproved, isApproved))
+      .where(conditions.length ? and(...conditions) : undefined)
       .orderBy(sql`${providerProfiles.createdAt} desc`)
       .limit(parseInt(limit))
       .offset(offset);
