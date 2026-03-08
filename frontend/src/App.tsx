@@ -45,6 +45,7 @@ const AdminDashboardPage = lazy(() => import("@/pages/admin/DashboardPage"));
 const AdminProvidersPage = lazy(() => import("@/pages/admin/ProvidersPage"));
 const AdminCategoriesPage = lazy(() => import("@/pages/admin/CategoriesPage"));
 const AdminReviewsPage = lazy(() => import("@/pages/admin/ReviewsPage"));
+const AdminUsersPage = lazy(() => import("@/pages/admin/UsersPage"));
 const NotificationsPage = lazy(() => import("@/pages/NotificationsPage"));
 
 // Full-page fallback for lazy boundaries
@@ -230,6 +231,14 @@ const router = createBrowserRouter([
             element: (
               <Suspense fallback={<PageLoader />}>
                 <AdminReviewsPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: "admin/users",
+            element: (
+              <Suspense fallback={<PageLoader />}>
+                <AdminUsersPage />
               </Suspense>
             ),
           },

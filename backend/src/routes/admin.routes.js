@@ -16,6 +16,7 @@ import {
   flagReview,
   getStats,
   seedAdmin,
+  getAdminUsers,
 } from "../controllers/admin.controller.js";
 
 const categorySchema = z.object({
@@ -51,5 +52,8 @@ router.patch("/reviews/:id/flag",     flagReview);
 
 // Dashboard stats
 router.get("/stats",                  getStats);
+
+// Users
+router.get("/users",                  getAdminUsers);
 
 export default router;

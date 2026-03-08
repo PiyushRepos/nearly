@@ -29,6 +29,7 @@ export const ROUTES = {
   ADMIN_PROVIDERS: "/admin/providers",
   ADMIN_CATEGORIES: "/admin/categories",
   ADMIN_REVIEWS: "/admin/reviews",
+  ADMIN_USERS: "/admin/users",
 
   // Shared (all authenticated roles)
   NOTIFICATIONS: "/notifications",

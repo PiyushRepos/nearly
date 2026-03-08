@@ -284,3 +284,34 @@ export async function getStats(_req, res, next) {
     next(err);
   }
 }
+
+// ─── GET /api/admin/users ─────────────────────────────────────────────────────
+export async function getAdminUsers(req, res, next) {
+  try {
+    const { role, page = "1", limit = "30" } = req.query;
+    const offset = (parseInt(page) - 1) * parseInt(limit);
+
+    const conditions = role ? [eq(user.role, role)] : [];
+
+    const data = await db
+      .select({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        image: user.image,
+        phone: user.phone,
+        emailVerified: user.emailVerified,
+        createdAt: user.createdAt,
+      })
+      .from(user)
+      .where(conditions.length ? and(...conditions) : undefined)
+      .orderBy(sql`${user.createdAt} desc`)
+      .limit(parseInt(limit))
+      .offset(offset);
+
+    res.json({ data });
+  } catch (err) {
+    next(err);
+  }
+}
