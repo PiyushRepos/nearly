@@ -99,6 +99,7 @@ export interface Booking {
   customerName?: string;
   customerImage?: string | null;
   updates?: BookingUpdate[];
+  hasReview?: boolean;
 }
 
 export interface BookingUpdate {
@@ -123,6 +124,29 @@ export interface Review {
   isApproved: boolean;
   isFlagged: boolean;
   createdAt: string;
+  customerName?: string;
+  customerImage?: string | null;
+  // For getMyReviews
+  providerName?: string;
+  providerImage?: string | null;
+  categoryName?: string;
+  categoryIcon?: string | null;
+}
+
+// ─── Payment Record ────────────────────────────────────────────────────────────
+
+export interface PaymentRecord {
+  id: string;
+  scheduledAt: string;
+  finalPrice: string | null;
+  quotedPrice: string | null;
+  razorpayPaymentId: string | null;
+  paymentStatus: PaymentStatus;
+  updatedAt: string;
+  categoryName?: string;
+  categoryIcon?: string | null;
+  providerName?: string;
+  providerImage?: string | null;
   customerName?: string;
   customerImage?: string | null;
 }

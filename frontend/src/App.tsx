@@ -29,6 +29,12 @@ const CustomerBookingDetailPage = lazy(
 );
 const CustomerReviewPage = lazy(() => import("@/pages/customer/ReviewPage"));
 const CustomerPayPage = lazy(() => import("@/pages/customer/PayPage"));
+const CustomerMyReviewsPage = lazy(
+  () => import("@/pages/customer/MyReviewsPage"),
+);
+const CustomerPaymentHistoryPage = lazy(
+  () => import("@/pages/customer/PaymentHistoryPage"),
+);
 const ProviderSetupPage = lazy(
   () => import("@/pages/provider/ProfileSetupPage"),
 );
@@ -40,6 +46,12 @@ const ProviderBookingsPage = lazy(
 );
 const ProviderBookingDetailPage = lazy(
   () => import("@/pages/provider/BookingDetailPage"),
+);
+const ProviderReceivedReviewsPage = lazy(
+  () => import("@/pages/provider/ReceivedReviewsPage"),
+);
+const ProviderEarningsPage = lazy(
+  () => import("@/pages/provider/EarningsPage"),
 );
 const AdminDashboardPage = lazy(() => import("@/pages/admin/DashboardPage"));
 const AdminProvidersPage = lazy(() => import("@/pages/admin/ProvidersPage"));
@@ -139,6 +151,22 @@ const router = createBrowserRouter([
             ),
           },
           {
+            path: "customer/reviews",
+            element: (
+              <Suspense fallback={<PageLoader />}>
+                <CustomerMyReviewsPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: "customer/payments",
+            element: (
+              <Suspense fallback={<PageLoader />}>
+                <CustomerPaymentHistoryPage />
+              </Suspense>
+            ),
+          },
+          {
             path: "book/:providerId",
             element: (
               <Suspense fallback={<PageLoader />}>
@@ -187,6 +215,22 @@ const router = createBrowserRouter([
             element: (
               <Suspense fallback={<PageLoader />}>
                 <ProviderBookingDetailPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: "provider/reviews",
+            element: (
+              <Suspense fallback={<PageLoader />}>
+                <ProviderReceivedReviewsPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: "provider/earnings",
+            element: (
+              <Suspense fallback={<PageLoader />}>
+                <ProviderEarningsPage />
               </Suspense>
             ),
           },

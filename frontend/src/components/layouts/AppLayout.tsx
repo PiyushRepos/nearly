@@ -11,6 +11,8 @@ import {
   Bell,
   Briefcase,
   ShieldCheck,
+  CreditCard,
+  TrendingUp,
 } from "lucide-react";
 
 import {
@@ -48,12 +50,16 @@ import { cn } from "@/lib/utils";
 const customerNav = [
   { label: "Dashboard", href: "/customer/dashboard", icon: LayoutDashboard },
   { label: "My Bookings", href: "/customer/bookings", icon: CalendarCheck },
+  { label: "My Reviews", href: "/customer/reviews", icon: Star },
+  { label: "Payments", href: "/customer/payments", icon: CreditCard },
   { label: "Browse", href: "/browse", icon: Search },
 ];
 
 const providerNav = [
   { label: "Dashboard", href: "/provider/dashboard", icon: LayoutDashboard },
   { label: "Bookings", href: "/provider/bookings", icon: Briefcase },
+  { label: "Reviews", href: "/provider/reviews", icon: Star },
+  { label: "Earnings", href: "/provider/earnings", icon: TrendingUp },
   { label: "My Profile", href: "/provider/profile", icon: Settings },
 ];
 

@@ -3,7 +3,12 @@ import { requireAuth } from "../middleware/requireAuth.js";
 import { requireRole } from "../middleware/requireRole.js";
 import { validate } from "../middleware/validate.js";
 import { z } from "zod";
-import { submitReview } from "../controllers/reviews.controller.js";
+import {
+  submitReview,
+  getProviderReviews,
+  getMyReviews,
+  getReceivedReviews,
+} from "../controllers/reviews.controller.js";
 
 const reviewSchema = z.object({
   bookingId: z.string().min(1),
@@ -13,6 +18,14 @@ const reviewSchema = z.object({
 
 const router = Router();
 
+// Public
+router.get("/provider/:providerId", getProviderReviews);
+
+// Customer
 router.post("/", requireAuth, requireRole("customer"), validate(reviewSchema), submitReview);
+router.get("/mine", requireAuth, requireRole("customer"), getMyReviews);
+
+// Provider
+router.get("/received", requireAuth, requireRole("provider"), getReceivedReviews);
 
 export default router;

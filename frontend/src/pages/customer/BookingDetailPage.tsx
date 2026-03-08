@@ -300,7 +300,7 @@ export default function CustomerBookingDetailPage() {
   const canCancel = ["requested", "confirmed"].includes(booking.status);
   const canPay =
     booking.status === "completed" && booking.paymentStatus === "unpaid";
-  const canReview = booking.status === "completed";
+  const canReview = booking.status === "completed" && !booking.hasReview;
   const justPaid = searchParams.get("paid") === "1";
   const justBooked = searchParams.get("booked") === "1";
 

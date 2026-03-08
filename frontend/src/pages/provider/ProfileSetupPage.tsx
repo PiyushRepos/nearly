@@ -255,7 +255,7 @@ export default function ProviderProfileSetupPage() {
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-base flex items-center gap-2">
-              <ImageIcon className="size-4 text-[var(--brand-orange)]" />
+              <ImageIcon className="size-4 text-brand-orange" />
               Cover photo
             </CardTitle>
           </CardHeader>
@@ -296,7 +296,7 @@ export default function ProviderProfileSetupPage() {
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="flex w-full flex-col items-center gap-2 rounded-xl border-2 border-dashed border-border py-10 text-center transition-colors hover:border-[var(--brand-orange)]/50 hover:bg-[var(--brand-orange)]/5"
+                className="flex w-full flex-col items-center gap-2 rounded-xl border-2 border-dashed border-border py-10 text-center transition-colors hover:border-(--brand-orange)/50 hover:bg-(--brand-orange)/5"
               >
                 <ImageIcon className="size-8 text-muted-foreground/40" />
                 <div>
@@ -316,7 +316,7 @@ export default function ProviderProfileSetupPage() {
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-base flex items-center gap-2">
-              <User className="size-4 text-[var(--brand-orange)]" />
+              <User className="size-4 text-brand-orange" />
               Basic information
             </CardTitle>
           </CardHeader>
@@ -409,7 +409,7 @@ export default function ProviderProfileSetupPage() {
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-base flex items-center gap-2">
-              <DollarSign className="size-4 text-[var(--brand-orange)]" />
+              <DollarSign className="size-4 text-brand-orange" />
               Services you offer
               <span className="ml-auto text-xs font-normal text-muted-foreground">
                 {selectedCategoryIds.length} selected
@@ -445,8 +445,8 @@ export default function ProviderProfileSetupPage() {
                           className={cn(
                             "flex items-start gap-2 rounded-xl border p-3 text-left transition-all focus-visible:ring-2 focus-visible:ring-ring",
                             checked
-                              ? "border-[var(--brand-orange)] bg-[var(--brand-orange)]/5 ring-1 ring-[var(--brand-orange)]"
-                              : "border-border hover:border-[var(--brand-orange)]/30 hover:bg-muted/30",
+                              ? "border-brand-orange bg-(--brand-orange)/5 ring-1 ring-brand-orange"
+                              : "border-border hover:border-(--brand-orange)/30 hover:bg-muted/30",
                           )}
                         >
                           <span className="text-lg leading-none mt-0.5 shrink-0">
@@ -464,7 +464,7 @@ export default function ProviderProfileSetupPage() {
                             )}
                           </div>
                           {checked && (
-                            <CheckCircle2 className="size-3.5 text-[var(--brand-orange)] shrink-0 mt-0.5" />
+                            <CheckCircle2 className="size-3.5 text-brand-orange shrink-0 mt-0.5" />
                           )}
                         </button>
                       );
@@ -485,7 +485,7 @@ export default function ProviderProfileSetupPage() {
         <Button
           type="submit"
           disabled={submitting}
-          className="w-full h-10 bg-[var(--brand-orange)] hover:bg-[var(--brand-orange)]/90 text-white gap-2"
+          className="w-full h-10 bg-brand-orange hover:bg-(--brand-orange)/90 text-white gap-2"
         >
           {submitting ? (
             <>

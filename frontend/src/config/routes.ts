@@ -17,12 +17,16 @@ export const ROUTES = {
   CUSTOMER_BOOK_SERVICE: "/book/:providerId",
   CUSTOMER_REVIEW: "/customer/bookings/:id/review",
   CUSTOMER_PAY: "/customer/bookings/:id/pay",
+  CUSTOMER_MY_REVIEWS: "/customer/reviews",
+  CUSTOMER_PAYMENT_HISTORY: "/customer/payments",
 
   // Provider (protected)
   PROVIDER_DASHBOARD: "/provider/dashboard",
   PROVIDER_BOOKINGS: "/provider/bookings",
   PROVIDER_BOOKING_DETAIL: "/provider/bookings/:id",
   PROVIDER_PROFILE_SETUP: "/provider/profile",
+  PROVIDER_RECEIVED_REVIEWS: "/provider/reviews",
+  PROVIDER_EARNINGS: "/provider/earnings",
 
   // Admin (protected)
   ADMIN_DASHBOARD: "/admin",

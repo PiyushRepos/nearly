@@ -5,6 +5,7 @@ import {
   providerProfiles,
   serviceCategories,
   user,
+  reviews,
 } from "../db/schema.js";
 import { eq, and, inArray, sql } from "drizzle-orm";
 import { uploadBuffer } from "../config/cloudinary.js";
@@ -162,7 +163,13 @@ export async function getBooking(req, res, next) {
       .where(eq(bookingUpdates.bookingId, id))
       .orderBy(sql`${bookingUpdates.createdAt} asc`);
 
-    res.json({ data: { ...booking, updates } });
+    const [existingReview] = await db
+      .select({ id: reviews.id })
+      .from(reviews)
+      .where(eq(reviews.bookingId, id))
+      .limit(1);
+
+    res.json({ data: { ...booking, updates, hasReview: !!existingReview } });
   } catch (err) {
     next(err);
   }

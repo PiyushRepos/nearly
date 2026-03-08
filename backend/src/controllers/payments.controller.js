@@ -1,8 +1,8 @@
 import Razorpay from "razorpay";
 import crypto from "crypto";
 import { db } from "../config/db.js";
-import { bookings } from "../db/schema.js";
-import { eq, and } from "drizzle-orm";
+import { bookings, providerProfiles, serviceCategories, user } from "../db/schema.js";
+import { eq, and, desc } from "drizzle-orm";
 import { notify } from "../lib/notify.js";
 
 function getRazorpay() {
@@ -127,7 +127,6 @@ export async function verifyPayment(req, res, next) {
 
     // Notify provider of payment
     if (booking.providerId) {
-      const { providerProfiles } = await import("../db/schema.js");
       const [provider] = await db
         .select({ userId: providerProfiles.userId })
         .from(providerProfiles)
@@ -144,6 +143,77 @@ export async function verifyPayment(req, res, next) {
     }
 
     res.json({ message: "Payment verified and recorded" });
+  } catch (err) {
+    next(err);
+  }
+}
+
+// ─── GET /api/payments/history ────────────────────────────────────────────────
+// Customer auth — list paid bookings for this customer
+export async function getPaymentHistory(req, res, next) {
+  try {
+    const providerUser = user;
+    const data = await db
+      .select({
+        id: bookings.id,
+        scheduledAt: bookings.scheduledAt,
+        finalPrice: bookings.finalPrice,
+        quotedPrice: bookings.quotedPrice,
+        razorpayPaymentId: bookings.razorpayPaymentId,
+        paymentStatus: bookings.paymentStatus,
+        updatedAt: bookings.updatedAt,
+        categoryName: serviceCategories.name,
+        categoryIcon: serviceCategories.icon,
+        providerName: providerUser.name,
+        providerImage: providerUser.image,
+      })
+      .from(bookings)
+      .leftJoin(serviceCategories, eq(bookings.categoryId, serviceCategories.id))
+      .leftJoin(providerProfiles, eq(bookings.providerId, providerProfiles.id))
+      .leftJoin(providerUser, eq(providerProfiles.userId, providerUser.id))
+      .where(and(eq(bookings.customerId, req.user.id), eq(bookings.paymentStatus, "paid")))
+      .orderBy(desc(bookings.updatedAt));
+
+    res.json({ data, total: data.length });
+  } catch (err) {
+    next(err);
+  }
+}
+
+// ─── GET /api/payments/earnings ───────────────────────────────────────────────
+// Provider auth — list completed + paid bookings (earnings) for this provider
+export async function getEarnings(req, res, next) {
+  try {
+    const [profile] = await db
+      .select({ id: providerProfiles.id })
+      .from(providerProfiles)
+      .where(eq(providerProfiles.userId, req.user.id))
+      .limit(1);
+
+    if (!profile) return res.status(404).json({ error: "Provider profile not found" });
+
+    const customerUser = user;
+    const data = await db
+      .select({
+        id: bookings.id,
+        scheduledAt: bookings.scheduledAt,
+        finalPrice: bookings.finalPrice,
+        quotedPrice: bookings.quotedPrice,
+        razorpayPaymentId: bookings.razorpayPaymentId,
+        paymentStatus: bookings.paymentStatus,
+        updatedAt: bookings.updatedAt,
+        categoryName: serviceCategories.name,
+        categoryIcon: serviceCategories.icon,
+        customerName: customerUser.name,
+        customerImage: customerUser.image,
+      })
+      .from(bookings)
+      .leftJoin(serviceCategories, eq(bookings.categoryId, serviceCategories.id))
+      .leftJoin(customerUser, eq(bookings.customerId, customerUser.id))
+      .where(and(eq(bookings.providerId, profile.id), eq(bookings.paymentStatus, "paid")))
+      .orderBy(desc(bookings.updatedAt));
+
+    res.json({ data, total: data.length });
   } catch (err) {
     next(err);
   }

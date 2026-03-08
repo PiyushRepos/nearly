@@ -82,7 +82,7 @@ function ActionBtn({
       className={cn(
         "flex-1 gap-2 h-10",
         variant === "default" &&
-          "bg-[var(--brand-orange)] hover:bg-[var(--brand-orange)]/90 text-white",
+          "bg-brand-orange hover:bg-(--brand-orange)/90 text-white",
       )}
     >
       {loading ? (
@@ -181,7 +181,7 @@ function WorkUpdateForm({
             <button
               type="button"
               onClick={() => fileRef.current?.click()}
-              className="size-16 rounded-lg border-2 border-dashed border-border flex items-center justify-center text-muted-foreground hover:border-[var(--brand-orange)]/50 hover:text-[var(--brand-orange)] transition-colors"
+              className="size-16 rounded-lg border-2 border-dashed border-border flex items-center justify-center text-muted-foreground hover:border-(--brand-orange)/50 hover:text-brand-orange transition-colors"
             >
               <PlusCircle className="size-5" />
             </button>
@@ -190,7 +190,7 @@ function WorkUpdateForm({
           <button
             type="button"
             onClick={() => fileRef.current?.click()}
-            className="flex w-full items-center gap-2 rounded-lg border border-dashed border-border px-3 py-2 text-xs text-muted-foreground hover:border-[var(--brand-orange)]/50 hover:text-foreground transition-colors"
+            className="flex w-full items-center gap-2 rounded-lg border border-dashed border-border px-3 py-2 text-xs text-muted-foreground hover:border-(--brand-orange)/50 hover:text-foreground transition-colors"
           >
             <ImageIcon className="size-4" /> Attach photos (optional)
           </button>
@@ -208,7 +208,7 @@ function WorkUpdateForm({
         <Button
           size="sm"
           disabled={!message.trim() || loading}
-          className="flex-1 bg-[var(--brand-orange)] hover:bg-[var(--brand-orange)]/90 text-white"
+          className="flex-1 bg-brand-orange hover:bg-(--brand-orange)/90 text-white"
           onClick={handleSubmit}
         >
           {loading && <Loader2 className="size-3.5 animate-spin mr-1" />}
@@ -321,7 +321,7 @@ export default function ProviderBookingDetailPage() {
                 getAvatarPlaceholder(booking.customerName ?? "")
               }
             />
-            <AvatarFallback className="text-xs bg-[var(--brand-orange)]/10 text-[var(--brand-orange)] font-semibold">
+            <AvatarFallback className="text-xs bg-(--brand-orange)/10 text-brand-orange font-semibold">
               {customerInitials}
             </AvatarFallback>
           </Avatar>
