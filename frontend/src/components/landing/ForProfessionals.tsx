@@ -1,5 +1,7 @@
 import { useRef } from "react";
+import { Link } from "react-router";
 import { motion, useInView } from "motion/react";
+import { useSession } from "@/lib/auth-client";
 
 const copyPoints = [
   {
@@ -31,6 +33,14 @@ const incomeRows = [
 export default function ForProfessionals() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
+  const { data: session } = useSession();
+  const role = (session?.user as { role?: string } | undefined)?.role;
+  const proLink =
+    role === "provider"
+      ? "/provider/dashboard"
+      : role === "customer"
+        ? "/provider/profile"
+        : "/auth/signup";
 
   return (
     <section
@@ -150,15 +160,20 @@ export default function ForProfessionals() {
               ))}
             </div>
 
-            <motion.a
-              href="#"
+            <motion.div
               initial={{ opacity: 0, y: 12 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: 0.5 }}
-              className="inline-block text-[0.92rem] font-semibold bg-secondary text-white px-9 py-3.75 rounded-full hover:bg-[#3a7a62] transition-all hover:-translate-y-0.5 shadow-[0_4px_20px_rgba(46,93,75,0.4)]"
             >
-              Start Taking Bookings
-            </motion.a>
+              <Link
+                to={proLink}
+                className="inline-block text-[0.92rem] font-semibold bg-secondary text-white px-9 py-3.75 rounded-full hover:bg-[#3a7a62] transition-all hover:-translate-y-0.5 shadow-[0_4px_20px_rgba(46,93,75,0.4)]"
+              >
+                {role === "provider"
+                  ? "Go to Dashboard"
+                  : "Start Taking Bookings"}
+              </Link>
+            </motion.div>
           </div>
         </div>
       </div>
