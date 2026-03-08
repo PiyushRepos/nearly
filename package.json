@@ -1,0 +1,14 @@
+{
+  "name": "nearly",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently --names \"frontend,backend\" --prefix-colors \"cyan,yellow\" \"pnpm --filter frontend dev\" \"pnpm --filter nearly-backend dev\"",
+    "dev:frontend": "pnpm --filter frontend dev",
+    "dev:backend": "pnpm --filter nearly-backend dev",
+    "install:all": "pnpm install --recursive"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
