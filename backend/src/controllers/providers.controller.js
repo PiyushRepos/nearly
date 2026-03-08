@@ -10,7 +10,7 @@ import { eq, and, ilike, sql } from "drizzle-orm";
 
 export async function getProviders(req, res, next) {
   try {
-    const { category, city, area, page = "1", limit = "12" } = req.query;
+    const { categoryId, city, area, page = "1", limit = "12" } = req.query;
     const offset = (parseInt(page) - 1) * parseInt(limit);
 
     const conditions = [eq(providerProfiles.isApproved, true)];
@@ -39,7 +39,7 @@ export async function getProviders(req, res, next) {
       .limit(parseInt(limit))
       .offset(offset);
 
-    if (category) {
+    if (categoryId) {
       query = db
         .select({
           id: providerProfiles.id,
@@ -61,12 +61,8 @@ export async function getProviders(req, res, next) {
           providerServices,
           eq(providerServices.providerId, providerProfiles.id)
         )
-        .innerJoin(
-          serviceCategories,
-          eq(providerServices.categoryId, serviceCategories.id)
-        )
         .where(
-          and(...conditions, eq(serviceCategories.slug, category))
+          and(...conditions, eq(providerServices.categoryId, categoryId))
         )
         .limit(parseInt(limit))
         .offset(offset);
@@ -74,10 +70,23 @@ export async function getProviders(req, res, next) {
 
     const data = await query;
 
-    const [{ count }] = await db
+    let countQuery = db
       .select({ count: sql`count(*)`.mapWith(Number) })
       .from(providerProfiles)
       .where(and(...conditions));
+
+    if (categoryId) {
+      countQuery = db
+        .select({ count: sql`count(*)`.mapWith(Number) })
+        .from(providerProfiles)
+        .innerJoin(
+          providerServices,
+          eq(providerServices.providerId, providerProfiles.id)
+        )
+        .where(and(...conditions, eq(providerServices.categoryId, categoryId)));
+    }
+
+    const [{ count }] = await countQuery;
 
     res.json({ data, total: count, page: parseInt(page), limit: parseInt(limit) });
   } catch (err) {
