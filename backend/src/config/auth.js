@@ -37,13 +37,6 @@ export const auth = betterAuth({
   session: {
     expiresIn: 60 * 60 * 24 * 7,
     updateAge: 60 * 60 * 24,
-
-    cookieAttributes: {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
-    },
-
     cookieCache: {
       enabled: true,
       maxAge: 60 * 5,
@@ -51,4 +44,13 @@ export const auth = betterAuth({
   },
 
   trustedOrigins: [process.env.FRONTEND_URL || "http://localhost:5173"],
+
+  advanced: {
+    useSecureCookies: process.env.NODE_ENV === "production",
+    defaultCookieAttributes: {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    },
+  },
 });
