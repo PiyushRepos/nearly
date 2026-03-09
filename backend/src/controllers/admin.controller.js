@@ -201,11 +201,15 @@ export async function deleteCategory(req, res, next) {
 // ─── GET /api/admin/reviews ───────────────────────────────────────────────────
 export async function getAdminReviews(req, res, next) {
   try {
-    const { flagged = "false" } = req.query;
+    const { flagged, approved } = req.query;
 
-    const conditions = flagged === "true"
-      ? [eq(reviews.isFlagged, true)]
-      : [];
+    const conditions = [];
+    if (flagged === "true") {
+      conditions.push(eq(reviews.isFlagged, true));
+    }
+    if (approved !== undefined) {
+      conditions.push(eq(reviews.isApproved, approved === "true"));
+    }
 
     const data = await db
       .select()
