@@ -7,7 +7,7 @@ This is the Express.js and Node.js backend API for **nearly.**, a hyperlocal hom
 ## 🚀 Tech Stack
 
 - **Runtime:** Node.js (v20+)
-- **Framework:** Express.js 4
+- **Framework:** Express.js
 - **Database:** PostgreSQL (Neon / Supabase)
 - **ORM:** Drizzle ORM
 - **Authentication:** Better Auth
