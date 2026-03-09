@@ -68,14 +68,14 @@ const CATEGORIES = [
 ];
 
 const CUSTOMERS = [
-    { name: "Aarav Mehta", email: "aarav@demo.nearly.in", phone: "9876543210" },
-    { name: "Diya Sharma", email: "diya@demo.nearly.in", phone: "9876543211" },
-    { name: "Rohan Gupta", email: "rohan@demo.nearly.in", phone: "9876543212" },
-    { name: "Ananya Singh", email: "ananya@demo.nearly.in", phone: "9876543213" },
-    { name: "Vivaan Reddy", email: "vivaan@demo.nearly.in", phone: "9876543214" },
-    { name: "Meera Patel", email: "meera@demo.nearly.in", phone: "9876543215" },
-    { name: "Ishaan Nair", email: "ishaan@demo.nearly.in", phone: "9876543216" },
-    { name: "Priya Desai", email: "priya@demo.nearly.in", phone: "9876543217" },
+    { name: "Aarav Mehta", email: "aarav@demo.nearly.in", phone: "9876543210", image: "https://i.pravatar.cc/300?img=11" },
+    { name: "Diya Sharma", email: "diya@demo.nearly.in", phone: "9876543211", image: "https://i.pravatar.cc/300?img=47" },
+    { name: "Rohan Gupta", email: "rohan@demo.nearly.in", phone: "9876543212", image: "https://i.pravatar.cc/300?img=67" },
+    { name: "Ananya Singh", email: "ananya@demo.nearly.in", phone: "9876543213", image: "https://i.pravatar.cc/300?img=44" },
+    { name: "Vivaan Reddy", email: "vivaan@demo.nearly.in", phone: "9876543214", image: "https://i.pravatar.cc/300?img=15" },
+    { name: "Meera Patel", email: "meera@demo.nearly.in", phone: "9876543215", image: "https://i.pravatar.cc/300?img=49" },
+    { name: "Ishaan Nair", email: "ishaan@demo.nearly.in", phone: "9876543216", image: "https://i.pravatar.cc/300?img=33" },
+    { name: "Priya Desai", email: "priya@demo.nearly.in", phone: "9876543217", image: "https://i.pravatar.cc/300?img=56" },
 ];
 
 const PROVIDERS = [
@@ -83,101 +83,121 @@ const PROVIDERS = [
         name: "Rajesh Kumar",
         email: "rajesh@demo.nearly.in",
         phone: "9898001001",
+        image: "https://i.pravatar.cc/300?img=70",
         bio: "15 years of plumbing experience. Certified master plumber with expertise in all residential and commercial plumbing solutions.",
         city: "Mumbai",
         area: "Andheri West",
         hourlyRate: "450",
         categorySlugs: ["plumbing", "ac-repair"],
+        coverPhotoUrl: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80",
     },
     {
         name: "Suresh Electricals",
         email: "suresh@demo.nearly.in",
         phone: "9898001002",
+        image: "https://i.pravatar.cc/300?img=12",
         bio: "Licensed electrician serving Mumbai for 10+ years. Specialise in smart home wiring, panel upgrades, and appliance installations.",
         city: "Mumbai",
         area: "Bandra East",
         hourlyRate: "500",
         categorySlugs: ["electrician", "security-systems"],
+        coverPhotoUrl: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=800&q=80",
     },
     {
         name: "CleanSpace Pro",
         email: "cleanspace@demo.nearly.in",
         phone: "9898001003",
+        image: "https://i.pravatar.cc/300?img=48",
         bio: "Professional deep-cleaning service with eco-friendly products. We handle homes, offices, and post-renovation cleanups.",
         city: "Delhi",
         area: "Lajpat Nagar",
         hourlyRate: "600",
         categorySlugs: ["home-cleaning", "pest-control"],
+        coverPhotoUrl: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=800&q=80",
     },
     {
         name: "Vikram Carpenter",
         email: "vikram@demo.nearly.in",
         phone: "9898001004",
+        image: "https://i.pravatar.cc/300?img=59",
         bio: "Custom furniture maker & repair specialist. From modular kitchens to antique restoration — quality woodwork guaranteed.",
         city: "Bangalore",
         area: "Koramangala",
         hourlyRate: "550",
         categorySlugs: ["carpentry", "painting"],
+        coverPhotoUrl: "https://images.unsplash.com/photo-1504148455328-c376907d081c?w=800&q=80",
     },
     {
         name: "CoolAir Services",
         email: "coolair@demo.nearly.in",
         phone: "9898001005",
+        image: "https://i.pravatar.cc/300?img=61",
         bio: "Expert AC technicians for all brands — installation, servicing, gas refill & repair. Same-day service available.",
         city: "Pune",
         area: "Kothrud",
         hourlyRate: "500",
         categorySlugs: ["ac-repair", "appliance-repair"],
+        coverPhotoUrl: "https://images.unsplash.com/photo-1527689368864-3a821dbccc34?w=800&q=80",
     },
     {
         name: "GreenThumb Gardens",
         email: "greenthumb@demo.nearly.in",
         phone: "9898001006",
+        image: "https://i.pravatar.cc/300?img=45",
         bio: "Transform your outdoor spaces! We offer landscaping, lawn maintenance, terrace gardening & plant care services.",
         city: "Mumbai",
         area: "Powai",
         hourlyRate: "350",
         categorySlugs: ["gardening"],
+        coverPhotoUrl: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80",
     },
     {
         name: "SafeGuard Systems",
         email: "safeguard@demo.nearly.in",
         phone: "9898001007",
+        image: "https://i.pravatar.cc/300?img=52",
         bio: "Complete home security solutions — CCTV, smart locks, alarm systems, video doorbells. Installation & maintenance.",
         city: "Delhi",
         area: "Saket",
         hourlyRate: "800",
         categorySlugs: ["security-systems", "electrician"],
+        coverPhotoUrl: "https://images.unsplash.com/photo-1558002038-1055907df827?w=800&q=80",
     },
     {
         name: "PaintPerfect Studio",
         email: "paintperfect@demo.nearly.in",
         phone: "9898001008",
+        image: "https://i.pravatar.cc/300?img=32",
         bio: "Premium wall painting & texture work. Asian Paints certified. Free color consultation included with every project.",
         city: "Bangalore",
         area: "Indiranagar",
         hourlyRate: "700",
         categorySlugs: ["painting"],
+        coverPhotoUrl: "https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=800&q=80",
     },
     {
         name: "QuickFix Appliances",
         email: "quickfix@demo.nearly.in",
         phone: "9898001009",
+        image: "https://i.pravatar.cc/300?img=57",
         bio: "Multi-brand appliance repair — washing machines, refrigerators, microwaves, dishwashers. 90-day service warranty.",
         city: "Hyderabad",
         area: "Madhapur",
         hourlyRate: "400",
         categorySlugs: ["appliance-repair", "electrician"],
+        coverPhotoUrl: "https://images.unsplash.com/photo-1584568694244-14fbdf83bd30?w=800&q=80",
     },
     {
         name: "PestFree Solutions",
         email: "pestfree@demo.nearly.in",
         phone: "9898001010",
+        image: "https://i.pravatar.cc/300?img=68",
         bio: "Government licensed pest control. Termite, cockroach, rodent treatments. Annual maintenance contracts available.",
         city: "Chennai",
         area: "T. Nagar",
         hourlyRate: "650",
         categorySlugs: ["pest-control", "home-cleaning"],
+        coverPhotoUrl: "https://images.unsplash.com/photo-1599940824399-b87987ceb72a?w=800&q=80",
     },
 ];
 
@@ -185,6 +205,7 @@ const ADMIN = {
     name: "Piyush Admin",
     email: "admin@demo.nearly.in",
     phone: "9000000001",
+    image: "https://i.pravatar.cc/300?img=18",
 };
 
 const CITIES = ["Mumbai", "Delhi", "Bangalore", "Pune", "Hyderabad", "Chennai"];
@@ -232,7 +253,7 @@ const PASSWORD = "Demo@1234"; // All seed users share this password
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-async function createUser({ name, email, phone, role }) {
+async function createUser({ name, email, phone, role, image }) {
     // Check if user already exists
     const [existing] = await db
         .select({ id: user.id })
@@ -260,6 +281,11 @@ async function createUser({ name, email, phone, role }) {
         throw new Error(`Failed to create user ${email}: ${JSON.stringify(result)}`);
     }
 
+    // Patch the image — Better Auth signUpEmail doesn't accept image field
+    if (image) {
+        await db.update(user).set({ image }).where(eq(user.id, result.user.id));
+    }
+
     console.log(`  ✓ Created ${role}: ${name} (${email})`);
     return result.user.id;
 }
@@ -285,19 +311,19 @@ async function seed() {
     console.log("2️⃣  Creating customer accounts…");
     const customerIds = [];
     for (const c of CUSTOMERS) {
-        const id = await createUser({ ...c, role: "customer" });
+        const id = await createUser({ ...c, role: "customer", image: c.image });
         customerIds.push(id);
     }
 
     console.log("\n3️⃣  Creating provider accounts…");
     const providerUserIds = [];
     for (const p of PROVIDERS) {
-        const id = await createUser({ name: p.name, email: p.email, phone: p.phone, role: "provider" });
+        const id = await createUser({ name: p.name, email: p.email, phone: p.phone, role: "provider", image: p.image });
         providerUserIds.push(id);
     }
 
     console.log("\n4️⃣  Creating admin account…");
-    const adminId = await createUser({ ...ADMIN, role: "admin" });
+    const adminId = await createUser({ ...ADMIN, role: "admin", image: ADMIN.image });
     // Promote to admin role
     await db.update(user).set({ role: "admin" }).where(eq(user.id, adminId));
     console.log(`  ✓ Admin promoted\n`);
@@ -333,7 +359,7 @@ async function seed() {
             hourlyRate: p.hourlyRate,
             availabilityStatus: pick(["available", "available", "available", "busy"]), // mostly available
             isApproved: true, // Pre-approve for demo
-            coverPhotoUrl: null,
+            coverPhotoUrl: p.coverPhotoUrl ?? null,
             avgRating: "0.00",
             totalReviews: 0,
             totalBookings: 0,
