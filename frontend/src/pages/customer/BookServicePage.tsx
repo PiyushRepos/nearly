@@ -18,6 +18,7 @@ import {
   X,
   Loader2,
   Star,
+  Navigation,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -46,6 +47,8 @@ const step2Schema = z.object({
   address: z.string().min(5, "Enter a full address"),
   city: z.string().min(2, "Enter your city"),
   area: z.string().min(2, "Enter your area / locality"),
+  latitude: z.string().optional(),
+  longitude: z.string().optional(),
 });
 
 const step3Schema = z.object({
@@ -243,8 +246,30 @@ export default function BookServicePage() {
   // ── Step 2 form ────────────────────────────────────────────────────────────
   const form2 = useForm<Step2>({
     resolver: zodSafeResolver(step2Schema),
-    defaultValues: s2Data ?? { address: "", city: "", area: "" },
+    defaultValues: s2Data ?? { address: "", city: "", area: "", latitude: "", longitude: "" },
   });
+
+  const [isLocating, setIsLocating] = useState(false);
+  const handleLocateMe = () => {
+    if (!navigator.geolocation) {
+      alert("Geolocation is not supported by your browser");
+      return;
+    }
+    setIsLocating(true);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        form2.setValue("latitude", pos.coords.latitude.toString());
+        form2.setValue("longitude", pos.coords.longitude.toString());
+        setIsLocating(false);
+      },
+      (err) => {
+        console.error("Geo error:", err);
+        alert("Could not get your location. Please check browser permissions.");
+        setIsLocating(false);
+      },
+      { timeout: 10000, maximumAge: 60000 }
+    );
+  };
 
   // ── Step 3 form ────────────────────────────────────────────────────────────
   const form3 = useForm<Step3>({
@@ -287,6 +312,8 @@ export default function BookServicePage() {
     formData.append("address", s2Data.address);
     formData.append("city", s2Data.city);
     formData.append("area", s2Data.area);
+    if (s2Data.latitude) formData.append("latitude", s2Data.latitude);
+    if (s2Data.longitude) formData.append("longitude", s2Data.longitude);
     if (s3Data?.notes) formData.append("notes", s3Data.notes);
     if (attachment) formData.append("attachment", attachment);
 
@@ -606,7 +633,26 @@ export default function BookServicePage() {
                     />
                   </Field>
 
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="flex items-center justify-between mt-2">
+                    <Label className="text-sm">Exact location</Label>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="h-7 text-xs gap-1"
+                      onClick={handleLocateMe}
+                      disabled={isLocating}
+                    >
+                      {isLocating ? (
+                        <Loader2 className="size-3 animate-spin" />
+                      ) : (
+                        <Navigation className="size-3" />
+                      )}
+                      Use my location
+                    </Button>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3 pb-2 border-b">
                     <Field
                       label="City"
                       error={form2.formState.errors.city?.message}
@@ -629,6 +675,24 @@ export default function BookServicePage() {
                         placeholder="Bandra West"
                         className="h-9"
                         aria-invalid={!!form2.formState.errors.area}
+                      />
+                    </Field>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3 mb-2">
+                    <Field label="Latitude" error={form2.formState.errors.latitude?.message}>
+                      <Input
+                        {...form2.register("latitude")}
+                        placeholder="Optional"
+                        className="h-9 bg-muted/50"
+                        readOnly
+                      />
+                    </Field>
+                    <Field label="Longitude" error={form2.formState.errors.longitude?.message}>
+                      <Input
+                        {...form2.register("longitude")}
+                        placeholder="Optional"
+                        className="h-9 bg-muted/50"
+                        readOnly
                       />
                     </Field>
                   </div>

@@ -12,6 +12,7 @@ import {
   Loader2,
   CheckCircle2,
   RefreshCw,
+  Navigation,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -42,6 +43,8 @@ const schema = z.object({
   bio: z.string().optional(),
   city: z.string().min(2, "Enter your city"),
   area: z.string().min(2, "Enter your area / locality"),
+  latitude: z.string().optional(),
+  longitude: z.string().optional(),
   hourlyRate: z
     .string()
     .optional()
@@ -142,6 +145,8 @@ export default function ProviderProfileSetupPage() {
       bio: "",
       city: "",
       area: "",
+      latitude: "",
+      longitude: "",
       hourlyRate: "",
       categoryIds: [],
       availabilityStatus: "available",
@@ -155,6 +160,8 @@ export default function ProviderProfileSetupPage() {
         bio: existingProfile.bio ?? "",
         city: existingProfile.city,
         area: existingProfile.area,
+        latitude: existingProfile.latitude ?? "",
+        longitude: existingProfile.longitude ?? "",
         hourlyRate: existingProfile.hourlyRate ?? "",
         categoryIds: existingProfile.services?.map((s) => s.id) ?? [],
         availabilityStatus: existingProfile.availabilityStatus,
@@ -175,11 +182,38 @@ export default function ProviderProfileSetupPage() {
     setCoverPreview(URL.createObjectURL(file));
   };
 
+  const [isLocating, setIsLocating] = useState(false);
+  const handleLocateMe = () => {
+    if (!navigator.geolocation) {
+      alert("Geolocation is not supported by your browser");
+      return;
+    }
+    setIsLocating(true);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        reset({
+          ...watch(),
+          latitude: pos.coords.latitude.toString(),
+          longitude: pos.coords.longitude.toString(),
+        });
+        setIsLocating(false);
+      },
+      (err) => {
+        console.error("Geo error:", err);
+        alert("Could not get your location. Please check browser permissions.");
+        setIsLocating(false);
+      },
+      { timeout: 10000, maximumAge: 60000 }
+    );
+  };
+
   const onSubmit = async (data: FormData) => {
     const formData = new FormData();
     if (data.bio) formData.append("bio", data.bio);
     formData.append("city", data.city);
     formData.append("area", data.area);
+    if (data.latitude) formData.append("latitude", data.latitude);
+    if (data.longitude) formData.append("longitude", data.longitude);
     if (data.hourlyRate) formData.append("hourlyRate", data.hourlyRate);
     data.categoryIds.forEach((id) => formData.append("categoryIds[]", id));
     if (coverPhoto) formData.append("coverPhoto", coverPhoto);
@@ -333,7 +367,26 @@ export default function ProviderProfileSetupPage() {
               />
             </Field>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="flex items-center justify-between mt-2">
+              <Label className="text-sm">Location details</Label>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="h-7 text-xs gap-1"
+                onClick={handleLocateMe}
+                disabled={isLocating}
+              >
+                {isLocating ? (
+                  <Loader2 className="size-3 animate-spin" />
+                ) : (
+                  <Navigation className="size-3" />
+                )}
+                Use my location
+              </Button>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 pb-2 border-b">
               <Field label="City" error={errors.city?.message} required>
                 <Input
                   {...register("city")}
@@ -352,6 +405,24 @@ export default function ProviderProfileSetupPage() {
                   placeholder="Andheri West"
                   className="h-9"
                   aria-invalid={!!errors.area}
+                />
+              </Field>
+            </div>
+            <div className="grid grid-cols-2 gap-3 mb-4">
+              <Field label="Latitude" error={errors.latitude?.message}>
+                <Input
+                  {...register("latitude")}
+                  placeholder="19.0760"
+                  className="h-9 bg-muted/50"
+                  readOnly
+                />
+              </Field>
+              <Field label="Longitude" error={errors.longitude?.message}>
+                <Input
+                  {...register("longitude")}
+                  placeholder="72.8777"
+                  className="h-9 bg-muted/50"
+                  readOnly
                 />
               </Field>
             </div>

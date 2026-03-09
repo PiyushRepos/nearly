@@ -9,6 +9,8 @@ import {
   CheckCircle2,
   ArrowUpDown,
   X,
+  Navigation,
+  Loader2,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -86,11 +88,11 @@ function ProviderCard({ provider }: { provider: ProviderProfile }) {
   const avail = AVAILABILITY_CONFIG[provider.availabilityStatus];
   const initials = provider.name
     ? provider.name
-        .split(" ")
-        .map((n) => n[0])
-        .join("")
-        .toUpperCase()
-        .slice(0, 2)
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2)
     : "??";
   const firstService = provider.services?.[0];
   const extraCount = (provider.services?.length ?? 0) - 1;
@@ -182,12 +184,18 @@ function ProviderCard({ provider }: { provider: ProviderProfile }) {
             </div>
           </div>
 
-          {/* Rating + jobs */}
-          <div className="flex items-center gap-2">
+          {/* Rating + jobs + optional distance */}
+          <div className="flex items-center gap-2 flex-wrap">
             <StarRating
               rating={Number(provider.avgRating)}
               count={provider.totalReviews}
             />
+            {provider.distance != null && (
+              <span className="inline-flex items-center gap-1 text-[11px] text-brand-orange bg-(--brand-orange)/10 px-1.5 py-0.5 rounded-sm font-medium">
+                <Navigation className="size-3" />
+                {provider.distance.toFixed(1)} km away
+              </span>
+            )}
             <span className="ml-auto inline-flex items-center gap-1 text-[11px] text-muted-foreground shrink-0">
               <Clock className="size-3" />
               {provider.totalBookings} jobs
@@ -247,6 +255,9 @@ export default function BrowsePage() {
 
   const categoryId = searchParams.get("categoryId") ?? "";
   const sortBy = searchParams.get("sort") ?? "rating";
+  const latParam = searchParams.get("latitude");
+  const lngParam = searchParams.get("longitude");
+  const [isLocating, setIsLocating] = useState(false);
 
   // Update a single param without losing others
   const setParam = useCallback(
@@ -270,6 +281,10 @@ export default function BrowsePage() {
     if (q) params.set("area", q);
     if (categoryId) params.set("categoryId", categoryId);
     if (sortBy && sortBy !== "rating") params.set("sort", sortBy);
+    if (latParam && lngParam) {
+      params.set("latitude", latParam);
+      params.set("longitude", lngParam);
+    }
     params.set("limit", "18");
     return `/providers?${params.toString()}`;
   })();
@@ -299,8 +314,35 @@ export default function BrowsePage() {
     setLocalSearch("");
   };
 
+  const handleLocateMe = () => {
+    if (!navigator.geolocation) {
+      alert("Geolocation is not supported by your browser");
+      return;
+    }
+
+    setIsLocating(true);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setSearchParams((prev) => {
+          const next = new URLSearchParams(prev);
+          next.set("latitude", pos.coords.latitude.toString());
+          next.set("longitude", pos.coords.longitude.toString());
+          next.delete("page");
+          return next;
+        });
+        setIsLocating(false);
+      },
+      (err) => {
+        console.error("Geo error:", err);
+        alert("Could not get your location. Please check browser permissions.");
+        setIsLocating(false);
+      },
+      { timeout: 10000, maximumAge: 60000 }
+    );
+  };
+
   const hasActiveFilters =
-    categoryId || searchParams.get("q") || (sortBy && sortBy !== "rating");
+    categoryId || searchParams.get("q") || (sortBy && sortBy !== "rating") || latParam;
 
   return (
     <div className="min-h-screen bg-background pt-16">
@@ -343,13 +385,30 @@ export default function BrowsePage() {
                 </button>
               )}
             </div>
-            <Button
-              type="submit"
-              size="sm"
-              className="h-9 bg-brand-orange hover:bg-(--brand-orange)/90 text-white"
-            >
-              Search
-            </Button>
+            <div className="flex gap-2 shrink-0">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="h-9 gap-1.5 px-3 text-muted-foreground"
+                onClick={handleLocateMe}
+                disabled={isLocating}
+              >
+                {isLocating ? (
+                  <Loader2 className="size-3.5 animate-spin" />
+                ) : (
+                  <Navigation className="size-3.5" />
+                )}
+                <span className="hidden sm:inline">Near me</span>
+              </Button>
+              <Button
+                type="submit"
+                size="sm"
+                className="h-9 bg-brand-orange hover:bg-(--brand-orange)/90 text-white"
+              >
+                Search
+              </Button>
+            </div>
           </form>
         </div>
       </div>
@@ -370,23 +429,23 @@ export default function BrowsePage() {
           </button>
           {catLoading
             ? Array.from({ length: 6 }).map((_, i) => (
-                <Skeleton key={i} className="h-8 w-24 rounded-full" />
-              ))
+              <Skeleton key={i} className="h-8 w-24 rounded-full" />
+            ))
             : categories?.map((cat) => (
-                <button
-                  key={cat.id}
-                  onClick={() => setParam("categoryId", cat.id)}
-                  className={cn(
-                    "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition-colors",
-                    categoryId === cat.id
-                      ? "border-brand-orange bg-brand-orange text-white"
-                      : "border-border bg-card text-foreground hover:border-(--brand-orange)/50 hover:bg-(--brand-orange)/5",
-                  )}
-                >
-                  {cat.icon && <span>{cat.icon}</span>}
-                  {cat.name}
-                </button>
-              ))}
+              <button
+                key={cat.id}
+                onClick={() => setParam("categoryId", cat.id)}
+                className={cn(
+                  "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition-colors",
+                  categoryId === cat.id
+                    ? "border-brand-orange bg-brand-orange text-white"
+                    : "border-border bg-card text-foreground hover:border-(--brand-orange)/50 hover:bg-(--brand-orange)/5",
+                )}
+              >
+                {cat.icon && <span>{cat.icon}</span>}
+                {cat.name}
+              </button>
+            ))}
         </div>
 
         {/* ── Toolbar: count + sort + clear ───────────────────────────────── */}
