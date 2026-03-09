@@ -9,7 +9,8 @@
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "db:seed": "node --env-file=.env src/scripts/seed-categories.js"
+    "db:seed": "node --env-file=.env src/scripts/seed-categories.js",
+    "db:seed-mock": "node --env-file=.env src/scripts/seed-mock-data.js"
   },
   "dependencies": {
     "better-auth": "^1.2.7",
