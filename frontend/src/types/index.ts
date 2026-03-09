@@ -46,6 +46,8 @@ export interface ProviderProfile {
   bio: string | null;
   city: string;
   area: string;
+  latitude?: string | null;
+  longitude?: string | null;
   hourlyRate: string | null;
   availabilityStatus: AvailabilityStatus;
   isApproved: boolean;
@@ -58,6 +60,7 @@ export interface ProviderProfile {
   // Joined
   name?: string;
   image?: string | null;
+  distance?: number | null;
   services?: ServiceCategory[];
 }
 
@@ -80,6 +83,8 @@ export interface Booking {
   address: string;
   city: string;
   area: string;
+  latitude?: string | null;
+  longitude?: string | null;
   scheduledAt: string;
   notes: string | null;
   attachmentUrl: string | null;
