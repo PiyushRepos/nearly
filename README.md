@@ -56,7 +56,9 @@ Professionals get their own dashboard to manage incoming bookings, update job pr
 ### Customer
 
 - **Browse & discover** service categories and local professionals with ratings
+- **Location-based search** — find professionals near your exact geolocation (via Haversine distance)
 - **Book a service** — select a provider, pick a date/time, add address and notes
+- **Real-time chat** — message professionals instantly regarding your booking
 - **Real-time booking timeline** — track status from Requested → Confirmed → In Progress → Completed
 - **Secure payments** via Razorpay (order creation + signature verification)
 - **Leave reviews** for completed and paid bookings (one review per booking)
@@ -69,6 +71,7 @@ Professionals get their own dashboard to manage incoming bookings, update job pr
 
 - **Profile setup** — bio, city/area, hourly rate, service categories, cover photo, documents upload
 - **Booking management** — accept, reject, start, and complete jobs
+- **Real-time chat** — communicate directly with customers to clarify job details
 - **Work updates** — add progress notes and photos during a job
 - **Earnings page** — view all completed paid jobs with total earned summary
 - **Reviews received** — see all customer reviews with average rating summary
@@ -86,6 +89,7 @@ Professionals get their own dashboard to manage incoming bookings, update job pr
 
 - **Authentication** via Better Auth (email/password, session management)
 - **Role-based access control** — customer, provider, admin
+- **Real-time WebSockets** (Socket.io) — powers the instant messaging infrastructure
 - **Image uploads** to Cloudinary (profile photos, booking attachments, work update photos)
 - **Responsive UI** — works on mobile and desktop
 
