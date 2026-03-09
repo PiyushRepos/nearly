@@ -12,10 +12,13 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Avoid redirect loops on the auth pages themselves
       if (!window.location.pathname.startsWith("/auth")) {
         window.location.href = "/auth/login";
       }
+    }
+    // Propagate backend error message directly to the catch block
+    if (error.response?.data?.error) {
+      error.message = error.response.data.error;
     }
     return Promise.reject(error);
   },

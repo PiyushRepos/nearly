@@ -62,7 +62,7 @@ export default function CustomerMyReviewsPage() {
           </CardContent>
         </Card>
       ) : (
-        <div className="space-y-3">
+        <div className="flex flex-col space-y-2.5">
           {reviews.map((review) => {
             const initials =
               review.providerName

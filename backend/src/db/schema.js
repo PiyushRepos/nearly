@@ -73,8 +73,8 @@ export const serviceCategories = pgTable("service_categories", {
   name: text("name").notNull(),
   slug: text("slug").notNull().unique(),
   description: text("description"),
-  icon: text("icon"),                                               // emoji or icon name
-  basePrice: decimal("base_price", { precision: 10, scale: 2 }),  // ₹ per hour floor
+  icon: text("icon"), // emoji or icon name
+  basePrice: decimal("base_price", { precision: 10, scale: 2 }), // ₹ per hour floor
   isActive: boolean("is_active").notNull().default(true),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
@@ -91,9 +91,11 @@ export const providerProfiles = pgTable("provider_profiles", {
   latitude: decimal("latitude", { precision: 10, scale: 7 }),
   longitude: decimal("longitude", { precision: 10, scale: 7 }),
   hourlyRate: decimal("hourly_rate", { precision: 10, scale: 2 }),
-  availabilityStatus: text("availability_status").notNull().default("available"), // available | busy | unavailable
+  availabilityStatus: text("availability_status")
+    .notNull()
+    .default("available"), // available | busy | unavailable
   isApproved: boolean("is_approved").notNull().default(false),
-  documentsUrl: jsonb("documents_url").$type(),                 // uploaded verification docs
+  documentsUrl: jsonb("documents_url").$type(), // uploaded verification docs
   coverPhotoUrl: text("cover_photo_url"),
   avgRating: decimal("avg_rating", { precision: 3, scale: 2 }).default("0.00"),
   totalReviews: integer("total_reviews").notNull().default(0),
@@ -112,9 +114,7 @@ export const providerServices = pgTable(
       .notNull()
       .references(() => serviceCategories.id, { onDelete: "cascade" }),
   },
-  (t) => [
-    uniqueIndex("provider_services_uniq").on(t.providerId, t.categoryId),
-  ]
+  (t) => [uniqueIndex("provider_services_uniq").on(t.providerId, t.categoryId)],
 );
 
 export const bookings = pgTable("bookings", {
@@ -150,8 +150,8 @@ export const bookingUpdates = pgTable("booking_updates", {
   bookingId: text("booking_id")
     .notNull()
     .references(() => bookings.id, { onDelete: "cascade" }),
-  status: text("status"),     // the status this update reflects
-  message: text("message"),   // provider's work note
+  status: text("status"), // the status this update reflects
+  message: text("message"), // provider's work note
   images: jsonb("images").$type(), // before/after image URLs
   createdById: text("created_by_id")
     .notNull()
@@ -171,7 +171,7 @@ export const reviews = pgTable("reviews", {
   providerId: text("provider_id")
     .notNull()
     .references(() => providerProfiles.id),
-  rating: integer("rating").notNull(),   // 1–5
+  rating: integer("rating").notNull(), // 1–5
   comment: text("comment"),
   isApproved: boolean("is_approved").notNull().default(true),
   isFlagged: boolean("is_flagged").notNull().default(false),
@@ -186,6 +186,19 @@ export const notifications = pgTable("notifications", {
   title: text("title").notNull(),
   body: text("body").notNull(),
   link: text("link"),
+  isRead: boolean("is_read").notNull().default(false),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+export const messages = pgTable("messages", {
+  id: text("id").primaryKey(),
+  bookingId: text("booking_id")
+    .notNull()
+    .references(() => bookings.id, { onDelete: "cascade" }),
+  senderId: text("sender_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  content: text("content").notNull(),
   isRead: boolean("is_read").notNull().default(false),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
@@ -212,7 +225,7 @@ export const providerProfilesRelations = relations(
     services: many(providerServices),
     bookings: many(bookings),
     reviews: many(reviews),
-  })
+  }),
 );
 
 export const serviceCategoriesRelations = relations(
@@ -220,7 +233,7 @@ export const serviceCategoriesRelations = relations(
   ({ many }) => ({
     providerServices: many(providerServices),
     bookings: many(bookings),
-  })
+  }),
 );
 
 export const providerServicesRelations = relations(
@@ -234,7 +247,7 @@ export const providerServicesRelations = relations(
       fields: [providerServices.categoryId],
       references: [serviceCategories.id],
     }),
-  })
+  }),
 );
 
 export const bookingsRelations = relations(bookings, ({ one, many }) => ({
@@ -251,6 +264,7 @@ export const bookingsRelations = relations(bookings, ({ one, many }) => ({
     references: [serviceCategories.id],
   }),
   updates: many(bookingUpdates),
+  messages: many(messages),
   review: one(reviews, {
     fields: [bookings.id],
     references: [reviews.bookingId],
@@ -286,6 +300,17 @@ export const reviewsRelations = relations(reviews, ({ one }) => ({
 export const notificationsRelations = relations(notifications, ({ one }) => ({
   user: one(user, {
     fields: [notifications.userId],
+    references: [user.id],
+  }),
+}));
+
+export const messagesRelations = relations(messages, ({ one }) => ({
+  booking: one(bookings, {
+    fields: [messages.bookingId],
+    references: [bookings.id],
+  }),
+  sender: one(user, {
+    fields: [messages.senderId],
     references: [user.id],
   }),
 }));

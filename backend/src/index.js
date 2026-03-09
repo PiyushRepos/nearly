@@ -7,8 +7,15 @@ import { toNodeHandler } from "better-auth/node";
 import { auth } from "./config/auth.js";
 import router from "./routes/index.js";
 import { errorHandler } from "./middleware/errorHandler.js";
+import http from "node:http";
+import { initSocket } from "./lib/socket.js";
 
 const app = express();
+const server = http.createServer(app);
+
+// Initialize Socket.io
+initSocket(server);
+
 const PORT = process.env.PORT || 3000;
 
 // ─── Security ────────────────────────────────────────────────────────────────
@@ -50,6 +57,6 @@ app.use("/api", router);
 // ─── Global Error Handler ─────────────────────────────────────────────────────
 app.use(errorHandler);
 
-app.listen(PORT, () => {
-  console.log(`\n  🟠 Nearly backend  →  http://localhost:${PORT}\n`);
+server.listen(PORT, () => {
+  console.log(`\n  🟠 Nearly backend (HTTP + WS) →  http://localhost:${PORT}\n`);
 });

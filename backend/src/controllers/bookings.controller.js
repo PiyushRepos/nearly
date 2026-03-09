@@ -155,8 +155,33 @@ export async function getBooking(req, res, next) {
     const { id } = req.params;
 
     const [booking] = await db
-      .select()
+      .select({
+        id: bookings.id,
+        status: bookings.status,
+        scheduledAt: bookings.scheduledAt,
+        address: bookings.address,
+        city: bookings.city,
+        area: bookings.area,
+        latitude: bookings.latitude,
+        longitude: bookings.longitude,
+        quotedPrice: bookings.quotedPrice,
+        finalPrice: bookings.finalPrice,
+        paymentStatus: bookings.paymentStatus,
+        createdAt: bookings.createdAt,
+        updatedAt: bookings.updatedAt,
+        providerId: bookings.providerId,
+        categoryId: bookings.categoryId,
+        notes: bookings.notes,
+        attachmentUrl: bookings.attachmentUrl,
+        categoryName: serviceCategories.name,
+        categoryIcon: serviceCategories.icon,
+        providerName: user.name,
+        providerImage: user.image,
+      })
       .from(bookings)
+      .leftJoin(serviceCategories, eq(bookings.categoryId, serviceCategories.id))
+      .leftJoin(providerProfiles, eq(bookings.providerId, providerProfiles.id))
+      .leftJoin(user, eq(providerProfiles.userId, user.id))
       .where(
         and(eq(bookings.id, id), eq(bookings.customerId, req.user.id))
       )

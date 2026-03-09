@@ -65,7 +65,7 @@ export default function CustomerDashboardPage() {
             </CardContent>
           </Card>
         ) : (
-          <div className="space-y-3">
+          <div className="flex flex-col space-y-2.5">
             {bookings.map((b) => (
               <Link key={b.id} to={`/customer/bookings/${b.id}`}>
                 <Card className="cursor-pointer transition-all hover:-translate-y-0.5 hover:shadow-md">
@@ -83,15 +83,14 @@ export default function CustomerDashboardPage() {
                       </p>
                     </div>
                     <span
-                      className={`rounded-full px-2.5 py-0.5 text-xs font-medium capitalize ${
-                        b.status === "completed"
+                      className={`rounded-full px-2.5 py-0.5 text-xs font-medium capitalize ${b.status === "completed"
                           ? "bg-emerald-100 text-emerald-700"
                           : b.status === "cancelled"
                             ? "bg-red-100 text-red-600"
                             : b.status === "in_progress"
                               ? "bg-blue-100 text-blue-700"
                               : "bg-amber-100 text-amber-700"
-                      }`}
+                        }`}
                     >
                       {b.status.replace("_", " ")}
                     </span>

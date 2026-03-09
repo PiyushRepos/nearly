@@ -8,17 +8,19 @@ import uploadsRouter from "./uploads.routes.js";
 import paymentsRouter from "./payments.routes.js";
 import notificationsRouter from "./notifications.routes.js";
 import reviewsRouter from "./reviews.routes.js";
+import messagesRouter from "./messages.routes.js";
 
 const router = Router();
 
-router.use("/categories",         categoriesRouter);
-router.use("/providers",          providersRouter);
-router.use("/customer/bookings",  bookingsRouter);
-router.use("/provider",           providerJobRouter);
-router.use("/admin",              adminRouter);
-router.use("/uploads",            uploadsRouter);
-router.use("/payments",           paymentsRouter);
-router.use("/notifications",      notificationsRouter);
-router.use("/reviews",            reviewsRouter);
+router.use("/categories", categoriesRouter);
+router.use("/providers", providersRouter);
+router.use("/customer/bookings", bookingsRouter);
+router.use("/provider", providerJobRouter);
+router.use("/admin", adminRouter);
+router.use("/uploads", uploadsRouter);
+router.use("/payments", paymentsRouter);
+router.use("/notifications", notificationsRouter);
+router.use("/reviews", reviewsRouter);
+router.use("/messages", messagesRouter);
 
 export default router;

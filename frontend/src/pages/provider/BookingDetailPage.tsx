@@ -38,6 +38,7 @@ import { cn, getAvatarPlaceholder } from "@/lib/utils";
 import { ROUTES } from "@/config/routes";
 import type { Booking, BookingStatus, SingleResponse } from "@/types";
 import { api } from "@/lib/api";
+import { BookingChatSheet } from "@/components/chat/BookingChatSheet";
 
 async function fetchBooking(url: string): Promise<Booking> {
   const res = await api.get<SingleResponse<Booking>>(url);
@@ -83,7 +84,7 @@ function ActionBtn({
       className={cn(
         "flex-1 gap-2 h-10",
         variant === "default" &&
-          "bg-brand-orange hover:bg-(--brand-orange)/90 text-white",
+        "bg-brand-orange hover:bg-(--brand-orange)/90 text-white",
       )}
     >
       {loading ? (
@@ -322,7 +323,7 @@ export default function ProviderBookingDetailPage() {
                 getAvatarPlaceholder(booking.customerName ?? "")
               }
             />
-            <AvatarFallback className="text-xs bg-(--brand-orange)/10 text-brand-orange font-semibold">
+            <AvatarFallback className="text-xs bg-brand-orange/10 text-brand-orange font-semibold">
               {customerInitials}
             </AvatarFallback>
           </Avatar>
@@ -334,6 +335,9 @@ export default function ProviderBookingDetailPage() {
               {booking.customerName}
             </p>
             <p className="text-xs text-muted-foreground">Customer</p>
+          </div>
+          <div className="ml-auto flex items-center shrink-0">
+            <BookingChatSheet booking={booking} />
           </div>
         </div>
       )}
@@ -540,7 +544,7 @@ function Row({
 }) {
   return (
     <div className="flex gap-3">
-      <Icon className="size-4 text-[var(--brand-orange)] shrink-0 mt-0.5" />
+      <Icon className="size-4 text-brand-orange shrink-0 mt-0.5" />
       <div className="flex-1 min-w-0 text-sm text-foreground">{children}</div>
     </div>
   );

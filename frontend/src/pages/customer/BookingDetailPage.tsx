@@ -35,6 +35,7 @@ import { cn, getAvatarPlaceholder } from "@/lib/utils";
 import { r, ROUTES } from "@/config/routes";
 import type { Booking, BookingStatus, SingleResponse } from "@/types";
 import { api } from "@/lib/api";
+import { BookingChatSheet } from "@/components/chat/BookingChatSheet";
 
 // ─── Status config ────────────────────────────────────────────────────────────
 
@@ -159,7 +160,7 @@ function BookingTimeline({ booking }: { booking: Booking }) {
                     {STATUS_LABELS[status]}
                   </p>
                   {active && (
-                    <span className="text-[10px] font-medium bg-(--brand-orange)/10 text-brand-orange rounded-full px-1.5 py-0.5">
+                    <span className="text-[10px] font-medium bg-brand-orange/10 text-brand-orange rounded-full px-1.5 py-0.5">
                       Current
                     </span>
                   )}
@@ -349,7 +350,7 @@ export default function CustomerBookingDetailPage() {
         </div>
       )}
       {justBooked && (
-        <div className="flex items-center gap-2.5 rounded-xl bg-(--brand-orange)/10 border border-(--brand-orange)/20 px-4 py-3 text-sm text-brand-orange">
+        <div className="flex items-center gap-2.5 rounded-xl bg-brand-orange/10 border border-(--brand-orange)/20 px-4 py-3 text-sm text-brand-orange">
           <CheckCircle2 className="size-4 shrink-0" />
           <span className="font-medium">Booking placed!</span> Waiting for the
           professional to confirm.
@@ -384,7 +385,7 @@ export default function CustomerBookingDetailPage() {
                 getAvatarPlaceholder(booking.providerName ?? "")
               }
             />
-            <AvatarFallback className="text-xs bg-(--brand-orange)/10 text-brand-orange font-semibold">
+            <AvatarFallback className="text-xs bg-brand-orange/10 text-brand-orange font-semibold">
               {providerInitials}
             </AvatarFallback>
           </Avatar>
@@ -399,11 +400,14 @@ export default function CustomerBookingDetailPage() {
               Service Professional
             </p>
           </div>
-          <Button variant="outline" size="sm" asChild>
-            <Link to={r(ROUTES.PROVIDER_PROFILE, { id: booking.providerId! })}>
-              View Profile
-            </Link>
-          </Button>
+          <div className="flex flex-col gap-2 shrink-0 sm:flex-row">
+            <BookingChatSheet booking={booking} />
+            <Button variant="outline" size="sm" asChild>
+              <Link to={r(ROUTES.PROVIDER_PROFILE, { id: booking.providerId! })}>
+                View Profile
+              </Link>
+            </Button>
+          </div>
         </div>
       )}
 

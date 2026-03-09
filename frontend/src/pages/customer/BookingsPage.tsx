@@ -10,6 +10,7 @@ import { r, ROUTES } from "@/config/routes";
 import type { Booking, BookingStatus, ListResponse } from "@/types";
 import { api } from "@/lib/api";
 import { getAvatarPlaceholder } from "@/lib/utils";
+import { BookingChatSheet } from "@/components/chat/BookingChatSheet";
 
 // ─── Status config ────────────────────────────────────────────────────────────
 
@@ -85,7 +86,7 @@ function BookingCard({ booking }: { booking: Booking }) {
       <Card className="py-0 transition-shadow hover:shadow-md hover:ring-foreground/20">
         <CardContent className="flex items-center gap-3 px-4 py-3.5">
           {/* Category icon */}
-          <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-(--brand-orange)/10 text-xl">
+          <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-brand-orange/10 text-xl">
             {booking.categoryIcon ?? "🔧"}
           </div>
 
@@ -140,6 +141,14 @@ function BookingCard({ booking }: { booking: Booking }) {
 
           {/* Price + chevron */}
           <div className="flex items-center gap-2 shrink-0">
+            <div
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+              }}
+            >
+              <BookingChatSheet booking={booking} />
+            </div>
             {(booking.finalPrice ?? booking.quotedPrice) && (
               <p className="text-sm font-semibold text-foreground">
                 ₹
@@ -282,7 +291,7 @@ export default function CustomerBookingsPage() {
             <TabsTrigger
               key={t.value}
               value={t.value}
-              className="rounded-full px-4 py-1.5 h-auto text-sm shrink-0 after:hidden data-[state=active]:bg-(--brand-orange)/10 data-[state=active]:text-brand-orange data-[state=active]:shadow-none data-active:bg-(--brand-orange)/10 data-active:text-brand-orange"
+              className="rounded-full px-4 py-1.5 h-auto text-sm shrink-0 after:hidden data-[state=active]:bg-brand-orange/10 data-[state=active]:text-brand-orange data-[state=active]:shadow-none data-active:bg-brand-orange/10 data-active:text-brand-orange"
             >
               {t.label}
             </TabsTrigger>

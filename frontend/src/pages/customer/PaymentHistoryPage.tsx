@@ -77,7 +77,7 @@ export default function CustomerPaymentHistoryPage() {
           </CardContent>
         </Card>
       ) : (
-        <div className="space-y-3">
+        <div className="flex flex-col space-y-2.5">
           {payments.map((p) => {
             const initials =
               p.providerName

@@ -117,6 +117,17 @@ export interface BookingUpdate {
   createdAt: string;
 }
 
+// ─── Messages ──────────────────────────────────────────────────────────────────
+
+export interface Message {
+  id: string;
+  bookingId: string;
+  senderId: string;
+  content: string;
+  isRead: boolean;
+  createdAt: string;
+}
+
 // ─── Reviews ───────────────────────────────────────────────────────────────────
 
 export interface Review {
