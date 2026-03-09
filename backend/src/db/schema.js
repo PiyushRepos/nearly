@@ -88,6 +88,8 @@ export const providerProfiles = pgTable("provider_profiles", {
   bio: text("bio"),
   city: text("city").notNull(),
   area: text("area").notNull(),
+  latitude: decimal("latitude", { precision: 10, scale: 7 }),
+  longitude: decimal("longitude", { precision: 10, scale: 7 }),
   hourlyRate: decimal("hourly_rate", { precision: 10, scale: 2 }),
   availabilityStatus: text("availability_status").notNull().default("available"), // available | busy | unavailable
   isApproved: boolean("is_approved").notNull().default(false),
@@ -127,6 +129,8 @@ export const bookings = pgTable("bookings", {
   address: text("address").notNull(),
   city: text("city").notNull(),
   area: text("area").notNull(),
+  latitude: decimal("latitude", { precision: 10, scale: 7 }),
+  longitude: decimal("longitude", { precision: 10, scale: 7 }),
   scheduledAt: timestamp("scheduled_at").notNull(),
   notes: text("notes"),
   attachmentUrl: text("attachment_url"),

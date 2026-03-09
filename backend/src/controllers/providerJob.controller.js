@@ -55,7 +55,7 @@ export async function createProfile(req, res, next) {
       return res.status(409).json({ error: "Profile already exists. Use PUT to update." });
     }
 
-    const { bio, city, area, hourlyRate, categoryIds } = req.body;
+    const { bio, city, area, latitude, longitude, hourlyRate, categoryIds } = req.body;
 
     let coverPhotoUrl = null;
     if (req.file) {
@@ -72,6 +72,8 @@ export async function createProfile(req, res, next) {
       bio: bio ?? null,
       city,
       area,
+      latitude: latitude ? String(latitude) : null,
+      longitude: longitude ? String(longitude) : null,
       hourlyRate: hourlyRate ? String(hourlyRate) : null,
       coverPhotoUrl,
       isApproved: false,
@@ -110,7 +112,7 @@ export async function updateProfile(req, res, next) {
 
     if (!profile) return res.status(404).json({ error: "Profile not found" });
 
-    const { bio, city, area, hourlyRate, categoryIds } = req.body;
+    const { bio, city, area, latitude, longitude, hourlyRate, categoryIds } = req.body;
 
     let coverPhotoUrl = undefined;
     if (req.file) {
@@ -124,6 +126,8 @@ export async function updateProfile(req, res, next) {
       bio: bio ?? null,
       city,
       area,
+      latitude: latitude !== undefined ? String(latitude) : undefined,
+      longitude: longitude !== undefined ? String(longitude) : undefined,
       hourlyRate: hourlyRate ? String(hourlyRate) : null,
       updatedAt: new Date(),
     };
@@ -309,19 +313,21 @@ export async function acceptBooking(req, res, next) {
       return res.status(409).json({ error: "Booking is no longer in requested state" });
     }
 
-    await db
-      .update(bookings)
-      .set({ status: "confirmed", updatedAt: new Date() })
-      .where(eq(bookings.id, id));
+    await db.transaction(async (tx) => {
+      await tx
+        .update(bookings)
+        .set({ status: "confirmed", updatedAt: new Date() })
+        .where(eq(bookings.id, id));
 
-    await db.insert(bookingUpdates).values({
-      id: crypto.randomUUID(),
-      bookingId: id,
-      status: "confirmed",
-      message: "Your booking has been accepted by the professional.",
-      images: [],
-      createdById: req.user.id,
-      createdAt: new Date(),
+      await tx.insert(bookingUpdates).values({
+        id: crypto.randomUUID(),
+        bookingId: id,
+        status: "confirmed",
+        message: "Your booking has been accepted by the professional.",
+        images: [],
+        createdById: req.user.id,
+        createdAt: new Date(),
+      });
     });
 
     await notify(booking.customerId, {
@@ -361,19 +367,21 @@ export async function rejectBooking(req, res, next) {
       return res.status(409).json({ error: "Booking is no longer in requested state" });
     }
 
-    await db
-      .update(bookings)
-      .set({ status: "cancelled", updatedAt: new Date() })
-      .where(eq(bookings.id, id));
+    await db.transaction(async (tx) => {
+      await tx
+        .update(bookings)
+        .set({ status: "cancelled", updatedAt: new Date() })
+        .where(eq(bookings.id, id));
 
-    await db.insert(bookingUpdates).values({
-      id: crypto.randomUUID(),
-      bookingId: id,
-      status: "cancelled",
-      message: "Your booking was declined by the professional.",
-      images: [],
-      createdById: req.user.id,
-      createdAt: new Date(),
+      await tx.insert(bookingUpdates).values({
+        id: crypto.randomUUID(),
+        bookingId: id,
+        status: "cancelled",
+        message: "Your booking was declined by the professional.",
+        images: [],
+        createdById: req.user.id,
+        createdAt: new Date(),
+      });
     });
 
     await notify(booking.customerId, {
@@ -427,21 +435,34 @@ export async function updateJobStatus(req, res, next) {
     const updates = { status, updatedAt: new Date() };
     if (status === "completed") updates.finalPrice = booking.quotedPrice;
 
-    await db.update(bookings).set(updates).where(eq(bookings.id, id));
-
     const messages = {
       in_progress: "Work has started on your booking.",
       completed: "Work is complete! Please pay to close the booking.",
     };
 
-    await db.insert(bookingUpdates).values({
-      id: crypto.randomUUID(),
-      bookingId: id,
-      status,
-      message: messages[status],
-      images: [],
-      createdById: req.user.id,
-      createdAt: new Date(),
+    await db.transaction(async (tx) => {
+      await tx.update(bookings).set(updates).where(eq(bookings.id, id));
+
+      await tx.insert(bookingUpdates).values({
+        id: crypto.randomUUID(),
+        bookingId: id,
+        status,
+        message: messages[status],
+        images: [],
+        createdById: req.user.id,
+        createdAt: new Date(),
+      });
+
+      // Increment totalBookings on completion
+      if (status === "completed") {
+        await tx
+          .update(providerProfiles)
+          .set({
+            totalBookings: sql`${providerProfiles.totalBookings} + 1`,
+            updatedAt: new Date(),
+          })
+          .where(eq(providerProfiles.id, profile.id));
+      }
     });
 
     await notify(booking.customerId, {
@@ -449,17 +470,6 @@ export async function updateJobStatus(req, res, next) {
       body: messages[status],
       link: `/customer/bookings/${id}`,
     });
-
-    // Increment totalBookings on completion
-    if (status === "completed") {
-      await db
-        .update(providerProfiles)
-        .set({
-          totalBookings: sql`${providerProfiles.totalBookings} + 1`,
-          updatedAt: new Date(),
-        })
-        .where(eq(providerProfiles.id, profile.id));
-    }
 
     res.json({ message: "Status updated", status });
   } catch (err) {

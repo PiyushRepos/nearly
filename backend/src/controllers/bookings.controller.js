@@ -14,7 +14,7 @@ import { notify } from "../lib/notify.js";
 // ─── POST /api/customer/bookings ──────────────────────────────────────────────
 export async function createBooking(req, res, next) {
   try {
-    const { providerId, categoryId, address, city, area, scheduledAt, notes } =
+    const { providerId, categoryId, address, city, area, latitude, longitude, scheduledAt, notes } =
       req.body;
 
     // Validate provider exists and is approved
@@ -46,33 +46,46 @@ export async function createBooking(req, res, next) {
     }
 
     const bookingId = crypto.randomUUID();
-    await db.insert(bookings).values({
-      id: bookingId,
-      customerId: req.user.id,
-      providerId,
-      categoryId,
-      address,
-      city,
-      area,
-      scheduledAt: new Date(scheduledAt),
-      notes: notes ?? null,
-      attachmentUrl,
-      status: "requested",
-      quotedPrice,
-      paymentStatus: "unpaid",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    });
 
-    // Insert initial status update
-    await db.insert(bookingUpdates).values({
-      id: crypto.randomUUID(),
-      bookingId,
-      status: "requested",
-      message: "Booking request submitted.",
-      images: [],
-      createdById: req.user.id,
-      createdAt: new Date(),
+    const created = await db.transaction(async (tx) => {
+      await tx.insert(bookings).values({
+        id: bookingId,
+        customerId: req.user.id,
+        providerId,
+        categoryId,
+        address,
+        city,
+        area,
+        latitude: latitude ? String(latitude) : null,
+        longitude: longitude ? String(longitude) : null,
+        scheduledAt: new Date(scheduledAt),
+        notes: notes ?? null,
+        attachmentUrl,
+        status: "requested",
+        quotedPrice,
+        paymentStatus: "unpaid",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+
+      // Insert initial status update
+      await tx.insert(bookingUpdates).values({
+        id: crypto.randomUUID(),
+        bookingId,
+        status: "requested",
+        message: "Booking request submitted.",
+        images: [],
+        createdById: req.user.id,
+        createdAt: new Date(),
+      });
+
+      const [newBooking] = await tx
+        .select()
+        .from(bookings)
+        .where(eq(bookings.id, bookingId))
+        .limit(1);
+
+      return newBooking;
     });
 
     // Notify provider via in-app notification
@@ -81,12 +94,6 @@ export async function createBooking(req, res, next) {
       body: `You have a new booking request for ${address}.`,
       link: `/provider/bookings/${bookingId}`,
     });
-
-    const [created] = await db
-      .select()
-      .from(bookings)
-      .where(eq(bookings.id, bookingId))
-      .limit(1);
 
     res.status(201).json({ data: created });
   } catch (err) {

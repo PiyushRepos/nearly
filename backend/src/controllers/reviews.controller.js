@@ -43,43 +43,48 @@ export async function submitReview(req, res, next) {
       return res.status(409).json({ error: "Review already submitted for this booking" });
     }
 
-    const [review] = await db
-      .insert(reviews)
-      .values({
-        id: crypto.randomUUID(),
-        bookingId,
-        customerId: req.user.id,
-        providerId: booking.providerId,
-        rating,
-        comment: comment ?? null,
-        isApproved: true,
-        isFlagged: false,
-        createdAt: new Date(),
-      })
-      .returning();
+    const review = await db.transaction(async (tx) => {
+      const [newReview] = await tx
+        .insert(reviews)
+        .values({
+          id: crypto.randomUUID(),
+          bookingId,
+          customerId: req.user.id,
+          providerId: booking.providerId,
+          rating,
+          comment: comment ?? null,
+          isApproved: true,
+          isFlagged: false,
+          createdAt: new Date(),
+        })
+        .returning();
 
-    // Recalculate provider's avg rating
-    const [stats] = await db
-      .select({
-        avg: sql`avg(rating)`.mapWith(Number),
-        count: sql`count(*)`.mapWith(Number),
-      })
-      .from(reviews)
-      .where(
-        and(
-          eq(reviews.providerId, booking.providerId),
-          eq(reviews.isApproved, true)
-        )
-      );
+      // Recalculate provider's avg rating
+      const [stats] = await tx
+        .select({
+          avg: sql`avg(rating)`.mapWith(Number),
+          count: sql`count(*)`.mapWith(Number),
+        })
+        .from(reviews)
+        .where(
+          and(
+            eq(reviews.providerId, booking.providerId),
+            eq(reviews.isApproved, true)
+          )
+        );
 
-    await db
-      .update(providerProfiles)
-      .set({
-        avgRating: stats.avg.toFixed(2),
-        totalReviews: stats.count,
-        updatedAt: new Date(),
-      })
-      .where(eq(providerProfiles.id, booking.providerId));
+      await tx
+        .update(providerProfiles)
+        .set({
+          // Fixed fallback: if avg is null (e.g. no reviews somehow), default to 0
+          avgRating: (stats.avg || 0).toFixed(2),
+          totalReviews: stats.count || 0,
+          updatedAt: new Date(),
+        })
+        .where(eq(providerProfiles.id, booking.providerId));
+
+      return newReview;
+    });
 
     // Notify the provider
     const [provider] = await db
