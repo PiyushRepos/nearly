@@ -60,18 +60,18 @@ export default function Footer() {
             © 2025 Nearly. Made with care for the people who fix things.
           </span>
           <div className="flex gap-5">
-            <a
-              href="#"
+            <Link
+              to="/privacy"
               className="text-[0.75rem] text-white/25 hover:text-white/60 transition-colors"
             >
               Privacy
-            </a>
-            <a
-              href="#"
+            </Link>
+            <Link
+              to="/terms"
               className="text-[0.75rem] text-white/25 hover:text-white/60 transition-colors"
             >
               Terms
-            </a>
+            </Link>
           </div>
         </div>
       </div>
